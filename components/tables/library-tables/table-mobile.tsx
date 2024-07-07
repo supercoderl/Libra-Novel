@@ -21,7 +21,7 @@ const LibraryTable: React.FC<LibraryTableProps> = ({ className, data, isNext, is
         <div className={className}>
             <Tabs defaultValue="overview" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="overview">Tổng quan</TabsTrigger>
                     <TabsTrigger value="analytics" disabled>
                         Analytics
                     </TabsTrigger>

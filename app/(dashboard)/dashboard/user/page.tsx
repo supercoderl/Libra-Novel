@@ -9,7 +9,7 @@ import { checkPermission } from '@/hooks/usePermissions';
 import { PermissionStates, User } from '@/types';
 import { useContext, useEffect, useState } from 'react';
 
-const breadcrumbItems = [{ title: 'User', link: '/dashboard/user' }];
+const breadcrumbItems = [{ title: 'Người dùng', link: '/dashboard/user' }];
 export default function Page() {
     const [users, setUsers] = useState<User[]>([]);
     const [isNext, setNext] = useState(false);

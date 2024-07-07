@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export function RecentSales() {
     return (
         <div className="space-y-8">
-            <div className="flex items-center">
+            <div className="flex items-start">
                 <Avatar className="h-9 w-9">
                     <AvatarImage src="https://i.pinimg.com/736x/56/36/21/5636212f54aea4c108c562ca8c5c6574.jpg" alt="Avatar" />
                     <AvatarFallback>OM</AvatarFallback>
@@ -14,9 +14,9 @@ export function RecentSales() {
                         olivia.martin@email.com
                     </p>
                 </div>
-                <div className="ml-auto font-medium">+$1,999.00</div>
+                <div className="ml-auto text-xs text-gray-400 font-medium">10m ago</div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-start">
                 <Avatar className="flex h-9 w-9 items-center justify-center space-y-0 border">
                     <AvatarImage src="https://i.pinimg.com/736x/56/36/21/5636212f54aea4c108c562ca8c5c6574.jpg" alt="Avatar" />
                     <AvatarFallback>JL</AvatarFallback>
@@ -25,9 +25,9 @@ export function RecentSales() {
                     <p className="text-sm font-medium leading-none">Jackson Lee</p>
                     <p className="text-sm text-muted-foreground">jackson.lee@email.com</p>
                 </div>
-                <div className="ml-auto font-medium">+$39.00</div>
+                <div className="ml-auto text-xs text-gray-400 font-medium">10m ago</div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-start">
                 <Avatar className="h-9 w-9">
                     <AvatarImage src="https://i.pinimg.com/736x/56/36/21/5636212f54aea4c108c562ca8c5c6574.jpg" alt="Avatar" />
                     <AvatarFallback>IN</AvatarFallback>
@@ -38,9 +38,9 @@ export function RecentSales() {
                         isabella.nguyen@email.com
                     </p>
                 </div>
-                <div className="ml-auto font-medium">+$299.00</div>
+                <div className="ml-auto text-xs text-gray-400 font-medium">10m ago</div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-start">
                 <Avatar className="h-9 w-9">
                     <AvatarImage src="https://i.pinimg.com/736x/56/36/21/5636212f54aea4c108c562ca8c5c6574.jpg" alt="Avatar" />
                     <AvatarFallback>WK</AvatarFallback>
@@ -49,9 +49,9 @@ export function RecentSales() {
                     <p className="text-sm font-medium leading-none">William Kim</p>
                     <p className="text-sm text-muted-foreground">will@email.com</p>
                 </div>
-                <div className="ml-auto font-medium">+$99.00</div>
+                <div className="ml-auto text-xs text-gray-400 font-medium">10m ago</div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-start">
                 <Avatar className="h-9 w-9">
                     <AvatarImage src="https://i.pinimg.com/736x/56/36/21/5636212f54aea4c108c562ca8c5c6574.jpg" alt="Avatar" />
                     <AvatarFallback>SD</AvatarFallback>
@@ -60,7 +60,7 @@ export function RecentSales() {
                     <p className="text-sm font-medium leading-none">Sofia Davis</p>
                     <p className="text-sm text-muted-foreground">sofia.davis@email.com</p>
                 </div>
-                <div className="ml-auto font-medium">+$39.00</div>
+                <div className="ml-auto text-xs text-gray-400 font-medium">10m ago</div>
             </div>
         </div>
     );
