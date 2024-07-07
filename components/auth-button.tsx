@@ -13,25 +13,27 @@ export const SocialSignInButton: React.FC<{ type: string }> = ({ type }) => {
 
     return (
         <Button
-            className="w-full flex justify-start px-20 items-center !mt-4"
+            className="w-full !mt-4"
             variant="outline"
             type="button"
             onClick={() =>
                 signIn(type, { callbackUrl: callbackUrl ?? '/dashboard' })
             }
         >
-            {
-                type === "facebook"
-                    ?
-                    <Icons.facebook className="mr-2 h-4 w-4" />
-                    :
-                    type === "google"
+            <span className='m-auto flex items-center'>
+                {
+                    type === "facebook"
                         ?
-                        <Icons.google className="mr-2 h-4 w-4" />
+                        <Icons.facebook className="mr-2 h-4 w-4" />
                         :
-                        <Icons.apple className="mr-2 h-4 w-4" />
-            }
-            Continue with {capitalizeFirstLetter(type)}
+                        type === "google"
+                            ?
+                            <Icons.google className="mr-2 h-4 w-4" />
+                            :
+                            <Icons.apple className="mr-2 h-4 w-4" />
+                }
+                Continue with {capitalizeFirstLetter(type)}
+            </span>
         </Button>
     );
 }

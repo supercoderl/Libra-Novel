@@ -53,7 +53,7 @@ export default function LoginPage() {
                 'flex h-full items-center p-4 lg:p-8 overflow-auto',
             )}>
                 <div className='flex flex-col items-center w-full'>
-                    <Link className='md:hidden mb-16 inline-flex gap-2 justify-center' href='/'>
+                    <Link className='md:hidden pb-8 inline-flex gap-2 justify-center' href='/'>
                         <Image className='w-[10%] h-auto' src={libra} alt='' />
                         <h1 className="font-bold text-3xl cursor-pointer">
                             Libra<span className="text-main">Novel</span>
