@@ -10,7 +10,7 @@ import { PermissionStates } from '@/types';
 import { useContext, useEffect, useState } from 'react';
 
 const breadcrumbItems = [{ title: 'Thể loại', link: '/dashboard/genre' }];
-export default function page() {
+export default function Page() {
     const [genres, setGenres] = useState([]);
     const [isNext, setNext] = useState(false);
     const [isPrevious, setPrevious] = useState(false);

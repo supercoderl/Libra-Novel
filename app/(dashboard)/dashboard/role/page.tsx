@@ -10,7 +10,7 @@ import { PermissionStates } from '@/types';
 import { useContext, useEffect, useState } from 'react';
 
 const breadcrumbItems = [{ title: 'Quyền', link: '/dashboard/role' }];
-export default function page() {
+export default function Page() {
     const [roles, setRoles] = useState([]);
     const [isNext, setNext] = useState(false);
     const [isPrevious, setPrevious] = useState(false);

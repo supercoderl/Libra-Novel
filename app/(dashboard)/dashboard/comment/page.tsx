@@ -10,7 +10,7 @@ import { PermissionStates } from '@/types';
 import { useContext, useEffect, useState } from 'react';
 
 const breadcrumbItems = [{ title: 'Bình luận', link: '/dashboard/comment' }];
-export default function page() {
+export default function Page() {
     const [comments, setComments] = useState([]);
     const [isNext, setNext] = useState(false);
     const [isPrevious, setPrevious] = useState(false);

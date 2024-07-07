@@ -17,7 +17,7 @@ const states = [
     'Bảo mật'
 ]
 
-export default function page() {
+export default function Page() {
     const [user, setUser] = useState<User | null>(null);
     const [stateChoosen, setStateChoosen] = useState(states[0]);
     const [loading, setLoading] = useState(true);
