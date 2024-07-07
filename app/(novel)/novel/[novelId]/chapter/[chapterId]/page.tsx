@@ -69,7 +69,7 @@ export default function Chapter() {
                                 <SelectValue
                                     defaultValue={"0"}
                                     placeholder="Chọn chương"
-                                    className="text-white"
+                                    className="text-white truncate"
                                 />
                             </SelectTrigger>
                             <SelectContent>
@@ -113,7 +113,7 @@ export default function Chapter() {
                         <ArrowLeft className="w-3" />
                         Trước
                     </Button>
-                    <Button className="bg-main flex items-center gap-1 text-brown hover:text-white"
+                    <Button className="bg-main flex items-center gap-1 text-brown hover:text-white truncate"
                         onClick={() => window.location.href = "/"}
                     >
                         <DoorOpen className="w-4" />
