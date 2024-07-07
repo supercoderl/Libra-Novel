@@ -16,7 +16,7 @@
   </a>
 
   <h1 className="font-bold text-xl cursor-pointer text-white">
-    Libra<span className="text-main">Novel</span>
+    Libra<span className="text-main" style="color: red">Novel</span>
   </h1>
 
   <p align="center">
@@ -174,7 +174,7 @@ FREE
 
 Minh Quang - [supercoderle](https://www.linkedin.com/in/supercoderle/) - minh.quang1720@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/supercoderl/Libra-Novel](https://github.com/supercoderl/Libra-Novel)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
