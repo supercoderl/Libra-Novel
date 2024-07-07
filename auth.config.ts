@@ -1,4 +1,4 @@
-import { NextAuthConfig } from 'next-auth';
+import { NextAuthConfig, User } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import login from './app/actions/authActions';
@@ -18,7 +18,7 @@ const authConfig: NextAuthConfig = {
           type: 'password'
         }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, req): Promise<any> {
         const res = await login({
           email: credentials?.email,
           password: credentials?.password
@@ -26,11 +26,11 @@ const authConfig: NextAuthConfig = {
 
         if (res.succeeded) {
           // Any object returned will be saved in `user` property of the JWT
-          var result = {
+          var result: User = {
             accessToken: res.data.accessToken,
             refreshToken: res.data.refreshToken,
             id: res.data.user.userID,
-            email: credentials.email,
+            email: res.data.user.email || "",
             roles: res.data.user.roles,
             avatar: res.data.user.avatar,
             name: res.data.user.fullName
