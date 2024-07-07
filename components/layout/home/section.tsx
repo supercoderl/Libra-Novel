@@ -10,7 +10,7 @@ import Spinner from "@/components/ui/spinner";
 SwiperCore.use([Pagination]);
 
 export default function Section(props: HomeSectionProps) {
-    const { isCarousel = false, isCategory = false, overrideClass = null, isMore = true, loading } = props;
+    const { isCarousel = false, isCategory = false, overrideClass = null, isMore = true } = props;
     const [swiper, setSwiper] = useState<SwiperCore | null>(null);
 
     return (
@@ -94,7 +94,7 @@ export default function Section(props: HomeSectionProps) {
                 }
             </div>
 
-            {loading ?
+            {props.loading ?
                 <div className="w-full py-10">
                     <Spinner className="w-12 h-12 m-auto" />
                 </div>
