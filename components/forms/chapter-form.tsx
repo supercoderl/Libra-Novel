@@ -2,15 +2,14 @@
 import * as z from 'zod';
 import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
-import { Trash } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { Trash, Undo2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -21,9 +20,8 @@ import { Heading } from '@/components/ui/heading';
 import { useToast } from '../ui/use-toast';
 import { AlertModal } from '../modal/alert-modal';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
-import { Textarea } from '../ui/textarea';
-import { createNewChapter, editChapter } from '@/app/actions/chapterActions';
 import { richTextOptions } from '@/constants/data';
+import useAxios from '@/hooks/useAxios';
 
 const formSchema = z.object({
     title: z
@@ -53,6 +51,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
     const description = initialData ? 'Chỉnh sửa thông tin chương.' : 'Thêm một chương mới';
     const toastMessage = initialData ? 'Đã cập nhật chương.' : 'Tạo chương thành công.';
     const action = initialData ? 'Lưu thay đổi' : 'Xác nhận tạo';
+    const axios = useAxios();
 
     const defaultValues = initialData || {
         title: '',
@@ -65,6 +64,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
         defaultValues
     });
 
+    //Init
     useEffect(() => {
         if (initialData) {
             form.setValue("title", initialData.title);
@@ -73,6 +73,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
         }
     }, [initialData]);
 
+    //Submit form
     const onSubmit = async (data: ChapterFormValue) => {
         setLoading(true);
         try {
@@ -85,8 +86,8 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
                     novelID: Number(initialData.novelID)
                 }
 
-                await editChapter(body).then((value) => {
-                    if (value && value.succeeded) {
+                await axios.put(`/update-chapter/${body.chapterID}`, body).then(({ data }) => {
+                    if (data && data.succeeded) {
                         toast({
                             variant: 'default',
                             title: 'Chúc mừng.',
@@ -102,8 +103,8 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
                     novelID
                 }
 
-                await createNewChapter(body).then((value) => {
-                    if (value && value.succeeded) {
+                await axios.post(`/create-chapter`, body).then(({ data }) => {
+                    if (data && data.succeeded) {
                         toast({
                             variant: 'default',
                             title: 'Chúc mừng.',
@@ -125,6 +126,7 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
         }
     };
 
+    //Delete item
     const onDelete = async () => {
         try {
             setLoading(true);
@@ -138,8 +140,6 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
         }
     };
 
-    // const triggerImgUrlValidation = () => form.trigger('imgUrl');
-
     return (
         <>
             <AlertModal
@@ -151,14 +151,22 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
             <div className="flex items-center justify-between">
                 <Heading title={title} description={description} />
                 {initialData && (
-                    <Button
-                        disabled={loading}
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setOpen(true)}
-                    >
-                        <Trash className="h-4 w-4" />
-                    </Button>
+                    <div className='flex gap-1.5 items-center'>
+                        <Button
+                            className=" bg-green-600 w-8 h-8 p-0"
+                            onClick={() => router.back()}
+                        >
+                            <Undo2 className="m-auto" />
+                        </Button>
+                        <Button
+                            disabled={loading}
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setOpen(true)}
+                        >
+                            <Trash className="h-4 w-4" />
+                        </Button>
+                    </div>
                 )}
             </div>
             <Separator />

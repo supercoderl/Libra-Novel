@@ -1,5 +1,11 @@
 import moment from "moment/moment";
 
-export default function dateFormatter(date, format){
+//Format date
+export const dateFormatter = (date, format) => {
     return date ? moment(date).format(format || "DD-MM-YYYY") : "N/A";
+}
+
+//Get time ago
+export const timeAgo = (date) => {
+    return moment(date).fromNow();
 }

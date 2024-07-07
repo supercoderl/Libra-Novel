@@ -1,18 +1,36 @@
-import { fetchAllChapters } from "@/app/actions/chapterActions";
 import { Button } from "@/components/ui/button";
+import useAxios from "@/hooks/useAxios";
 import { Chapter, Novel } from "@/types";
-import dateFormatter from "@/utils/date";
+import { dateFormatter } from "@/utils/date";
+import { splitGenres } from "@/utils/text";
 import { CirclePlus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-scroll";
 
 const NovelInfo: React.FC<{ novel?: Novel | null }> = ({ novel }) => {
     const [chapters, setChapters] = useState([]);
+    const axios = useAxios();
 
+    //Load chapter list
     const onLoadData = async (novelID: number) => {
-        await fetchAllChapters(1, 10, novelID).then((value) => {
-            if (value && value.succeeded && value.data) {
-                setChapters(value.data.items);
+        await axios.get(`/get-chapters/${novelID}`, {
+            params: {
+                pageIndex: 1,
+                pageSize: 10
+            }
+        }).then(({ data }) => {
+            if (data && data.succeeded && data.data) {
+                setChapters(data.data.items);
+            }
+        });
+    }
+
+    //Counting view number, adding 1 to novel view count
+    const onChapterClick = async (chapterID: number) => {
+        window.location.href = `/novel/${novel?.novelID}/chapter/${chapterID}`;
+        await axios.put(`/update-count/${novel?.novelID}`, null, {
+            params: {
+                type: 'view'
             }
         });
     }
@@ -28,32 +46,32 @@ const NovelInfo: React.FC<{ novel?: Novel | null }> = ({ novel }) => {
             <img className="m-auto w-44 md:w-72" src={novel?.coverImage || "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"} alt={novel?.img_des || ""} />
 
             <div className="text-white flex-1 mt-5 md:mt-0">
-                <h4 className="font-normal">WATCH</h4>
+                <h4 className="font-normal">Đọc truyện</h4>
                 <h3 className="font-bold text-2xl md:py-3">{novel?.title}</h3>
                 <p className="pt-4 pb-2">
-                    <b className="text-description">Other name: </b>
-                    <span className="text-sm font-light text-justify">{novel?.other_name}</span>
+                    <b className="text-description">Tên khác: </b>
+                    <span className="text-sm font-light text-justify">{novel?.otherName}</span>
                 </p>
                 <p className="pb-3">
-                    <b className="text-description">Genres: </b>
-                    <span className="text-sm font-light">{novel?.genre}</span>
+                    <b className="text-description">Thể loại: </b>
+                    <span className="text-sm font-light">{splitGenres(novel?.genres)}</span>
                 </p>
                 <p className="pb-3">
-                    <b className="text-description">Date aired: </b>
+                    <b className="text-description">Ngày xuất bản: </b>
                     <span className="text-sm font-light">{dateFormatter(novel?.publishedDate)}</span>
                 </p>
                 <div className="grid md:flex gap-4">
                     <p>
-                        <b className="text-description">Status: </b>
+                        <b className="text-description">Trạng thái: </b>
                         <span className="text-sm font-light">{Number(novel?.status) === 1 ? 'Đang tiến hành' : 'Đã hoàn thành'}</span>
                     </p>
                     <p>
-                        <b className="text-description">Views: </b>
-                        <span className="text-sm font-light">{novel?.view_num}</span>
+                        <b className="text-description">Lượt xem: </b>
+                        <span className="text-sm font-light">{novel?.viewCount || 0}</span>
                     </p>
                     <p>
-                        <b className="text-description">Favorites: </b>
-                        <span className="text-sm font-light">{novel?.favor_num}</span>
+                        <b className="text-description">Lượt yêu thích: </b>
+                        <span className="text-sm font-light">{novel?.favoriteCount || 0}</span>
                     </p>
                     <Link
                         activeClass="Bookmark"
@@ -64,11 +82,11 @@ const NovelInfo: React.FC<{ novel?: Novel | null }> = ({ novel }) => {
                         className="cursor-pointer flex gap-1 items-center text-facebook underline hover:text-main transition-all duration-500"
                     >
                         <CirclePlus className="w-4" />
-                        Bookmark
+                        Đánh dấu
                     </Link>
                 </div>
                 <p className="mt-5">
-                    <b className="text-description">Summary: </b>
+                    <b className="text-description">Mô tả: </b>
                     <span className="text-sm font-light text-justify">{novel?.description}</span>
                 </p>
             </div>
@@ -83,7 +101,7 @@ const NovelInfo: React.FC<{ novel?: Novel | null }> = ({ novel }) => {
                             <Button
                                 key={index}
                                 className="bg-main text-brown hover:bg-brown hover:text-white"
-                                onClick={() => window.location.href = `/novel/${novel?.novelID}/chapter/${chapter?.chapterID}`}
+                                onClick={() => onChapterClick(chapter?.chapterID)}
                             >{chapter.chapterNumber}</Button>
                         ))
                     }

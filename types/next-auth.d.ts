@@ -38,6 +38,8 @@ declare module 'next-auth' {
         } | null;
         id: string;
         roles: number[] | null;
+        email?: string | null;
+        avatar?: string | null
     }
 }
 
@@ -50,6 +52,7 @@ declare module '@auth/core/jwt' {
         refreshToken: {
             token: string,
             expireMinutes: number
-        }
+        },
+        id?: string
     }
 }

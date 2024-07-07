@@ -3,14 +3,13 @@ import * as z from 'zod';
 import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Trash } from 'lucide-react';
+import { Trash, Undo2 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -20,7 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import { Heading } from '@/components/ui/heading';
 import { useToast } from '../ui/use-toast';
 import { AlertModal } from '../modal/alert-modal';
-import { createNewGenre, editGenre } from '@/app/actions/genreActions';
+import useAxios from '@/hooks/useAxios';
 
 const formSchema = z.object({
     name: z
@@ -46,6 +45,7 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
     const description = initialData ? 'Chỉnh sửa thông tin thể loại.' : 'Thêm một thể loại mới';
     const toastMessage = initialData ? 'Đã cập nhật thể loại.' : 'Tạo thể loại thành công.';
     const action = initialData ? 'Lưu thay đổi' : 'Xác nhận tạo';
+    const axios = useAxios();
 
     const defaultValues = initialData || {
         name: '',
@@ -57,6 +57,7 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
         defaultValues
     });
 
+    //Init
     useEffect(() => {
         if (initialData) {
             form.setValue("name", initialData.name);
@@ -64,6 +65,7 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
         }
     }, [initialData]);
 
+    //Submit form
     const onSubmit = async (data: GenreFormValue) => {
         setLoading(true);
         try {
@@ -74,8 +76,8 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
                     parentID: data.parentID !== "0" ? Number(data.parentID) : null
                 }
 
-                await editGenre(body).then((value) => {
-                    if (value && value.succeeded) {
+                await axios.put(`/update-genre/${body.genreID}`, body).then(({ data }) => {
+                    if (data && data.succeeded) {
                         toast({
                             variant: 'default',
                             title: 'Chúc mừng.',
@@ -89,8 +91,8 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
                     parentID: data.parentID !== "0" ? Number(data.parentID) : null
                 }
 
-                await createNewGenre(body).then((value) => {
-                    if (value && value.succeeded) {
+                await axios.post(`/create-genre`, body).then(({ data }) => {
+                    if (data && data.succeeded) {
                         toast({
                             variant: 'default',
                             title: 'Chúc mừng.',
@@ -112,6 +114,7 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
         }
     };
 
+    //Delete item
     const onDelete = async () => {
         try {
             setLoading(true);
@@ -136,14 +139,22 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
             <div className="flex items-center justify-between">
                 <Heading title={title} description={description} />
                 {initialData && (
-                    <Button
-                        disabled={loading}
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setOpen(true)}
-                    >
-                        <Trash className="h-4 w-4" />
-                    </Button>
+                    <div className='flex gap-1.5 items-center'>
+                        <Button
+                            className=" bg-green-600 w-8 h-8 p-0"
+                            onClick={() => router.back()}
+                        >
+                            <Undo2 className="m-auto" />
+                        </Button>
+                        <Button
+                            disabled={loading}
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setOpen(true)}
+                        >
+                            <Trash className="h-4 w-4" />
+                        </Button>
+                    </div>
                 )}
             </div>
             <Separator />

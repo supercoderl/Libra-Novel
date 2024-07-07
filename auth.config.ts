@@ -31,7 +31,9 @@ const authConfig: NextAuthConfig = {
             refreshToken: res.data.refreshToken,
             id: res.data.user.userID,
             email: credentials.email,
-            roles: res.data.user.roles
+            roles: res.data.user.roles,
+            avatar: res.data.user.avatar,
+            name: res.data.user.fullName
           };
           return result;
         } else {
@@ -50,8 +52,20 @@ const authConfig: NextAuthConfig = {
       const currentTime = Math.floor(Date.now() / 1000);
 
       if (trigger === "update") {
-        token.accessToken = session.accessToken;
-        token.refreshToken = session.refreshToken;
+        token.accessToken = {
+          token: session.accessToken.token,
+          expireMinutes: session.accessToken.expireMinutes,
+        };
+        token.refreshToken = {
+          token: session.refreshToken.token,
+          expireMinutes: session.refreshToken.expireMinutes
+        };
+
+        token.exp = currentTime + session.accessToken.expireMinutes * 60;
+        token.email = session.user.email;
+        token.roles = session.user.roles;
+        token.picture = session.user.avatar;
+        token.name = session.user.name;
 
         return token;
       }
@@ -69,6 +83,9 @@ const authConfig: NextAuthConfig = {
         token.exp = currentTime + user.accessToken.expireMinutes * 60;
         token.email = user.email;
         token.roles = user.roles;
+        token.picture = user.avatar;
+        token.name = user.name;
+        token.id = user.id;
 
         return token;
       }
@@ -80,7 +97,11 @@ const authConfig: NextAuthConfig = {
         accessToken: token.accessToken,
         refreshToken: token.refreshToken,
         user: {
-          roles: token?.roles
+          roles: token?.roles,
+          avatar: token?.picture,
+          name: token?.name,
+          email: token?.email,
+          id: token?.id
         },
         expires: new Date((token.exp ? token.exp : 1) * 1000),
       };

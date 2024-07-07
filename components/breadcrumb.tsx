@@ -21,7 +21,7 @@ export default function BreadCrumb({ items, isDashboard, className }: BreadCrumb
                 href={isDashboard ? '/dashboard' : '/'}
                 className="overflow-hidden text-ellipsis whitespace-nowrap"
             >
-                { isDashboard ? "Dashboard" : "Trang chủ"}
+                { isDashboard ? "Bảng điều khiển" : "Trang chủ"}
             </Link>
             {items?.map((item: BreadCrumbType, index: number) => (
                 <React.Fragment key={item.title}>

@@ -5,10 +5,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { heros, heros_list } from "@/constants/hero";
+import { Novel } from "@/types";
 
 SwiperCore.use([Pagination]);
 
-export default function Hero() {
+const Hero: React.FC<{ novels: Novel[] }> = ({ novels }) => {
     return (
         <div className="pt-10 md:grid md:auto-rows-fr md:grid-cols-4 gap-6">
             <div className="md:col-span-3">
@@ -60,35 +61,44 @@ export default function Hero() {
                     </Swiper>
                 </div>
             </div>
-            <div className="mt-10">
+            <div className="mt-10 md:mt-0">
                 <div className="flex gap-2 mb-5">
                     <Image className="w-6" src={starNew} alt="" />
                     <h5 className="text-white text-lg">Đọc nhiều</h5>
                 </div>
                 <div className="bg-trending text-white rounded-lg px-4 py-6 flex flex-col justify-between h-full gap-2 md:gap-0 shadow-[rgba(0,_0,_0,_0.8)_4px_4px_4px] shadow-[rgba(255,_255,_255,_0.4)]">
                     {
-                        heros_list.length > 0 && heros_list.map((hero_list, index) => (
-                            <div className="flex items-center jusity-center gap-4" key={index}>
-                                <h3 className="md:text-xl text-medium">0{index + 1}</h3>
-                                <img className="w-9" src={hero_list.img} alt={hero_list.img_des} />
-                                <div className="flex flex-col gap-1">
-                                    <p className="font-medium md:text-lg">{hero_list.title}</p>
-                                    <div className="flex gap-3">
-                                        <span className="flex gap-2 text-xs md:text-sm items-center">
-                                            <Eye className="w-4 md:w-5" />
-                                            {hero_list.view_num}.{hero_list.view_num}
-                                        </span>
-                                        <span className="flex gap-2 text-xs md:text-sm items-center">
-                                            <Heart className="w-4 md:w-5" />
-                                            {hero_list.favor_num}.{hero_list.favor_num}
-                                        </span>
+                        novels && novels.length > 0 ?
+                            novels.sort((a, b) => b.viewCount - a.viewCount).slice(0, 6).map((novel, index) => (
+                                <div
+                                    className="flex items-center jusity-center gap-4 cursor-pointer"
+                                    key={index}
+                                    onClick={() => window.location.href = `/novel/${novel.novelID}`}
+                                >
+                                    <h3 className="md:text-xl text-medium">0{index + 1}</h3>
+                                    <img className="w-9" src={novel.coverImage || process.env.NEXT_PUBLIC_DUMMY_IMAGE} alt={novel.img_des || ""} />
+                                    <div className="flex flex-col gap-1 overflow-hidden">
+                                        <p className="font-medium md:text-lg truncate">{novel.title}</p>
+                                        <div className="flex gap-3">
+                                            <span className="flex gap-2 text-xs md:text-sm items-center">
+                                                <Eye className="w-4 md:w-5" />
+                                                {novel.viewCount}.{novel.viewCount}
+                                            </span>
+                                            <span className="flex gap-2 text-xs md:text-sm items-center">
+                                                <Heart className="w-4 md:w-5" />
+                                                {novel.favoriteCount}.{novel.favoriteCount}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            ))
+                            :
+                            <p className="text-center">Dữ liệu rỗng</p>
                     }
                 </div>
             </div>
         </div>
     )
 }
+
+export default Hero;

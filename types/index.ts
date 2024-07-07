@@ -3,13 +3,12 @@ import { StaticImageData } from "next/image";
 
 
 export interface NavItem {
+  menuID: number;
   title: string;
-  href?: string;
+  path?: string;
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
-  label?: string;
-  description?: string;
 }
 
 export interface NavItemWithChildren extends NavItem {
@@ -43,6 +42,7 @@ export type User = {
   lastName: string;
   gender: string;
   isActive: number;
+  roles: string[];
 }
 
 export type Response = {
@@ -72,9 +72,10 @@ export type HeroList = {
 export type HomeSectionProps = {
   isCategory?: boolean;
   isCarousel?: boolean;
+  isMore?: boolean;
   overrideClass?: string | null;
   title: string;
-  categories?: string[];
+  categories?: any[];
   novels: Novel[];
 }
 
@@ -83,16 +84,17 @@ export type Novel = {
   img: StaticImageData;
   img_des?: string | null;
   title: string;
-  other_name?: string;
-  genre?: string;
+  otherName?: string;
+  mappings?: Genre[];
+  genres?: string[];
   coverImage?: string | null;
   review_score?: number;
   description: string | null;
   published_year?: number;
-  publishedDate?: Date | string;
+  publishedDate: Date;
   status?: number;
-  view_num?: number;
-  favor_num?: number;
+  viewCount: number;
+  favoriteCount: number;
   totalPages?: number;
   chapters?: string[];
 }
@@ -112,4 +114,54 @@ export type Genre = {
   genreID: number;
   name: string;
   parentID: number;
+}
+
+export type Role = {
+  roleID: number;
+  name: string;
+  roleCode: number;
+  isActive: boolean;
+  permissions: string[] | null;
+  menus: string[] | null;
+}
+
+export type Comment = {
+  commentID: number;
+  content: string;
+  userID: string;
+  novelID: number;
+  chapterID: number;
+  createdDate: Date;
+  updatedDate: Date;
+  deletedDate: Date;
+  name?: string;
+  avatar?: string;
+  novel?: string;
+  chapter?: string;
+}
+
+export type Permission = {
+  permissionID: number;
+  permissionCode: number;
+  title: string;
+  titleEN: string;
+  parent: number;
+  createdBy: string;
+  createdDate: Date;
+  updatedBy: string;
+  updatedDate: Date;
+  parentTitle: string;
+}
+
+export type Node = {
+  value: number;
+  label: string;
+  children?: Node[]
+}
+
+export type PermissionStates = {
+  canView: boolean | null;
+  canEdit: boolean;
+  canCreate?: boolean;
+  canDelete: boolean;
 }

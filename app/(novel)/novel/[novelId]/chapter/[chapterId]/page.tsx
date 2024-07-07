@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import Spinner from "@/components/ui/spinner";
 import { Chapter } from "@/types";
 import { ArrowLeft, ArrowRight, DoorOpen } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -20,6 +21,7 @@ import { useEffect, useState } from "react";
 export default function Chapter() {
     const { chapterId, novelId } = useParams();
     const [chapter, setChapter] = useState<Chapter | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const breadcrumbItems = [
         { title: 'Truyện', link: '/novel' },
@@ -28,12 +30,13 @@ export default function Chapter() {
         { title: String(chapterId), link: `/novel/${novelId}/chapter/${chapterId}` }
     ];
 
+    //Load chapter list by novel
     const onLoadData = async (id: number) => {
         await fetchChapterByID(id).then((value) => {
             if (value && value.succeeded && value.data) {
                 setChapter(value.data);
             }
-        });
+        }).finally(() => setTimeout(() => setLoading(false), 300));
     }
 
     useEffect(() => {
@@ -50,7 +53,7 @@ export default function Chapter() {
                 <div className="p-6 text-white text-center border border-dashed	flex flex-col gap-3">
                     <h3 className="text-xl font-semibold">{chapter?.novelTitle || "Truyện ngắn"}</h3>
                     <p className="text-lg text-description">Chương {chapter?.chapterNumber}: {chapter?.title}</p>
-                    <span className="text-sm font-light"><b>Tác giả:</b> Thẩm Tinh Băng</span>
+                    <span className="text-sm font-light"><b>Tác giả:</b> Cập nhật sau</span>
                 </div>
 
                 <div className="flex items-center justify-center gap-3 py-8">
@@ -96,6 +99,10 @@ export default function Chapter() {
                 </div>
 
                 <div className="">
+                    {
+                        loading &&
+                        <Spinner className="w-12 h-12 m-auto" />
+                    }
                     {chapter && (
                         <div className="content" dangerouslySetInnerHTML={{ __html: chapter.content }} />
                     )}

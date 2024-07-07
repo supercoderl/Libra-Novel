@@ -82,6 +82,9 @@ module.exports = {
       },
       translate: {
         '-1/2': '-50%',
+      },
+      backgroundImage: {
+        'custom-radial': 'radial-gradient(circle at 99%, #f4f4f4 10%, grey 70%)'
       }
     }
   },

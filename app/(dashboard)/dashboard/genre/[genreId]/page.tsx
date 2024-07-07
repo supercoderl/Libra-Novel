@@ -4,33 +4,35 @@ import BreadCrumb from '@/components/breadcrumb';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { fetchGenreByID } from '@/app/actions/genreActions';
 import { GenreForm } from '@/components/forms/genre-form';
+import useAxios from '@/hooks/useAxios';
 
 export default function Page() {
     const searchParams = useSearchParams()
     const genreID = searchParams.get("genreID");
     const [genre, setGenre] = useState(null);
+    const axios = useAxios();
 
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (genreID) {
-            const response = fetchGenreByID(Number(genreID));
-            if (response) {
-                response.then((value) => {
-                    if (value && value.succeeded) {
-                        setGenre(value.data);
-                    }
-                }).finally(() => setLoading(false));
-            }
+            onLoadData();
         }
     }, []);
 
+    //Load single genre
+    const onLoadData = async () => {
+        await axios.get(`/get-genre-by-id/${Number(genreID)}`).then(({ data }) => {
+            if (data && data.succeeded && data.data) {
+                setGenre(data.data);
+            }
+        }).finally(() => setLoading(false));
+    }
+
     const breadcrumbItems = [
         { title: 'Thể loại', link: '/dashboard/genre' },
-        { title: 'Tạo mới', link: '/dashboard/genre/create' },
-        { title: 'Chỉnh sửa', link: `/dashboard/genre/edit?id=${genreID}` }
+        { title: genreID ? 'Chỉnh sửa' : 'Tạo mới', link: genreID ? `/dashboard/genre/edit?id=${genreID}` : '/dashboard/genre/create' },
     ];
     return (
         <ScrollArea className="h-full">

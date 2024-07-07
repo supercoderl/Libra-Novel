@@ -1,31 +1,78 @@
 'use client';
 
-import { fetchAllUser } from '@/app/actions/userActions';
 import BreadCrumb from '@/components/breadcrumb';
+import { Forbidden } from '@/components/errors/forbidden';
 import { UserClient } from '@/components/tables/user-tables/client';
-import { useEffect, useState } from 'react';
+import { PermissionsContext } from '@/contexts/AppProvider';
+import useAxios from '@/hooks/useAxios';
+import { checkPermission } from '@/hooks/usePermissions';
+import { PermissionStates, User } from '@/types';
+import { useContext, useEffect, useState } from 'react';
 
 const breadcrumbItems = [{ title: 'User', link: '/dashboard/user' }];
 export default function page() {
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState<User[]>([]);
+    const [isNext, setNext] = useState(false);
+    const [isPrevious, setPrevious] = useState(false);
+    const [pageIndex, setPageIndex] = useState(1);
+    const { permissions } = useContext(PermissionsContext);
+    const [permissionStates, setPermissionStates] = useState<PermissionStates>({
+        canView: null,
+        canEdit: false,
+        canCreate: false,
+        canDelete: false
+    });
+    const axios = useAxios();
 
+    //Loading user list
     const onLoadData = async () => {
-        fetchAllUser().then((value) => {
-            if (value && value.succeeded && value.data) {
-                setUsers(value.data.items);
+        await axios.get(`/get-all-users`, {
+            params: { pageIndex }
+        }).then(({ data }) => {
+            if (data && data.succeeded && data.data) {
+                setUsers(data.data.items);
+                setNext(data.data.next);
+                setPrevious(data.data.previous);
             }
         });
     };
 
+    //Init
     useEffect(() => {
         onLoadData();
-    }, []);
+    }, [pageIndex]);
+
+    //Second calling to check permission
+    useEffect(() => {
+        if (permissions) {
+            setPermissionStates({
+                canView: checkPermission(["ViewUserList"], permissions),
+                canEdit: checkPermission(["UpdateUser"], permissions),
+                canCreate: checkPermission(["CreateUser"], permissions),
+                canDelete: checkPermission(["DeleteUser"], permissions)
+            });
+        };
+    }, [permissions]);
 
     return (
         <>
             <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
                 <BreadCrumb items={breadcrumbItems} isDashboard />
-                <UserClient data={users} />
+                {
+                    permissionStates.canView !== null ?
+                        permissionStates.canView === true ?
+                            <UserClient
+                                data={users}
+                                isNext={isNext}
+                                isPrevious={isPrevious}
+                                setPageIndex={setPageIndex}
+                                permissions={permissionStates}
+                            />
+                            :
+                            <Forbidden />
+                        :
+                        null
+                }
             </div>
         </>
     );

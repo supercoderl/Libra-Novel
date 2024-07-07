@@ -33,23 +33,23 @@ export function DashboardNav({
         return null;
     }
 
-    console.log('isActive', isMobileNav, isMinimized);
+
 
     return (
         <nav className="grid items-start gap-2">
             <TooltipProvider>
-                {items.map((item, index) => {
-                    const Icon = Icons[item.icon || 'arrowRight'];
+                {items.map((menu, index) => {
+                    const Icon = Icons[menu.icon || 'arrowRight'];
                     return (
-                        item.href && (
+                        menu.path && (
                             <Tooltip key={index}>
                                 <TooltipTrigger asChild>
                                     <Link
-                                        href={item.disabled ? '/' : item.href}
+                                        href={menu.disabled ? '/' : menu.path}
                                         className={cn(
                                             'flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
-                                            path === item.href ? 'bg-accent' : 'transparent',
-                                            item.disabled && 'cursor-not-allowed opacity-80'
+                                            path === menu.path ? 'bg-accent' : 'transparent',
+                                            menu.disabled && 'cursor-not-allowed opacity-80'
                                         )}
                                         onClick={() => {
                                             if (setOpen) setOpen(false);
@@ -58,7 +58,7 @@ export function DashboardNav({
                                         <Icon className={`ml-3 size-5`} />
 
                                         {isMobileNav || (!isMinimized && !isMobileNav) ? (
-                                            <span className="mr-2 truncate">{item.title}</span>
+                                            <span className="mr-2 truncate">{menu.title}</span>
                                         ) : (
                                             ''
                                         )}
@@ -70,7 +70,7 @@ export function DashboardNav({
                                     sideOffset={8}
                                     className={!isMinimized ? 'hidden' : 'inline-block'}
                                 >
-                                    {item.title}
+                                    {menu.title}
                                 </TooltipContent>
                             </Tooltip>
                         )

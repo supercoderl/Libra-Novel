@@ -3,13 +3,16 @@
 import Link from 'next/link';
 import { UserAuthForm } from '@/components/forms/user-auth-form';
 import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import libra from '../../../public/assets/images/logo/libra.png';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 export default function LoginPage() {
     const pathName = usePathname();
 
+    //Init checking the pathname contains login or register to navigate to right state
     useEffect(() => {
         if (!pathName.includes("login") && !pathName.includes("register")) window.history.back();
     }, []);
@@ -33,18 +36,6 @@ export default function LoginPage() {
                     className='absolute w-full top-0 left-0 blur-[1px] brightness-50'
                 />
                 <div className="relative z-20 flex items-center text-lg font-medium">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-6 w-6"
-                    >
-                        <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-                    </svg>
                     <h1 className="font-bold text-xl cursor-pointer text-white">
                         Libra<span className="text-main">Novel</span>
                     </h1>
@@ -61,43 +52,51 @@ export default function LoginPage() {
             <div className={cn(
                 'flex h-full items-center p-4 lg:p-8 overflow-auto',
             )}>
-                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-                    <div className="flex flex-col space-y-2 text-center">
-                        <h1 className="text-2xl font-semibold tracking-tight">
-                            {pathName.includes("login") ? 'Đăng nhập' : 'Đăng ký'}
+                <div className='flex flex-col items-center w-full'>
+                    <Link className='md:hidden mb-16 inline-flex gap-2 justify-center' href='/'>
+                        <Image className='w-[10%] h-auto' src={libra} alt='' />
+                        <h1 className="font-bold text-3xl cursor-pointer">
+                            Libra<span className="text-main">Novel</span>
                         </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Chào mừng đến với trang tiểu thuyết Libra Novel
+                    </Link>
+                    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                        <div className="flex flex-col space-y-2 text-center">
+                            <h1 className="text-2xl font-semibold tracking-tight">
+                                {pathName.includes("login") ? 'Đăng nhập' : 'Đăng ký'}
+                            </h1>
+                            <p className="text-sm text-muted-foreground">
+                                Chào mừng đến với trang tiểu thuyết Libra Novel
+                            </p>
+                        </div>
+                        <UserAuthForm state={pathName} />
+                        <p className="px-6 text-center text-sm text-muted-foreground">
+                            Bằng cách nhấn tiếp tục, bạn đồng ý với{' '}
+                            <Link
+                                href="/terms"
+                                className="underline underline-offset-4 hover:text-primary"
+                            >
+                                Điều khoản
+                            </Link>{' '}
+                            và{' '}
+                            <Link
+                                href="/privacy"
+                                className="underline underline-offset-4 hover:text-primary"
+                            >
+                                Chính sách bảo mật
+                            </Link>
+                            {' '}của chúng tôi
+                            .
+                        </p>
+                        <p className='text-sm text-center'>
+                            {pathName.includes("login") ?
+                                'Bạn chưa có tài khoản?'
+                                :
+                                'Bạn đã có tài khoản?'}
+                            <a className='text-red-600' href={pathName.includes("login") ? '/register' : '/login'}>
+                                {pathName.includes("login") ? ' Đăng ký ngay!' : ' Đăng nhập ngay!'}
+                            </a>
                         </p>
                     </div>
-                    <UserAuthForm state={pathName} />
-                    <p className="px-6 text-center text-sm text-muted-foreground">
-                        Bằng cách nhấn tiếp tục, bạn đồng ý với{' '}
-                        <Link
-                            href="/terms"
-                            className="underline underline-offset-4 hover:text-primary"
-                        >
-                            Điều khoản
-                        </Link>{' '}
-                        và{' '}
-                        <Link
-                            href="/privacy"
-                            className="underline underline-offset-4 hover:text-primary"
-                        >
-                            Chính sách bảo mật
-                        </Link>
-                        {' '}của chúng tôi
-                        .
-                    </p>
-                    <p className='text-sm text-center'>
-                        {pathName.includes("login") ?
-                            'Bạn chưa có tài khoản?'
-                            :
-                            'Bạn đã có tài khoản?'}
-                        <a className='text-red-600' href={pathName.includes("login") ? '/register' : '/login'}>
-                            {pathName.includes("login") ? ' Đăng ký ngay!' : ' Đăng nhập ngay!'}
-                        </a>
-                    </p>
                 </div>
             </div>
         </div>

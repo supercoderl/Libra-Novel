@@ -1,12 +1,52 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { Search, Slash, Tally1Icon } from "lucide-react";
+import { Bell, Search, Tally1Icon } from "lucide-react";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import UserNav from "./user-nav";
+import GenreNav from "./genre/genre-nav";
+import useAxios from "@/hooks/useAxios";
+import SearchComponent from "../ui/search";
+import { encodeEmailToNumber } from "@/utils/text";
 
 export default function HomeHeader() {
     const [isOpen, setIsOpen] = useState(false);
+    const [novels, setNovels] = useState([]);
+    const { status, data: session } = useSession();
+    const axios = useAxios();
+
+    //Sign out
+    const handleSignOut = async () => {
+        if (session) {
+            await axios.post(`/logout`, null, {
+                params: { token: session.refreshToken?.token }
+            }).then(() => {
+                signOut({
+                    redirect: true,
+                    callbackUrl: "/login"
+                });
+            });
+        }
+    }
+
+    //Load novel list
+    const onLoadData = async () => {
+        await axios.get("get-novels", {
+            params: {
+                pageSize: 100
+            }
+        }).then(({ data }) => {
+            if (data && data.succeeded && data.data) {
+                setNovels(data.data.items);
+            }
+        });
+    }
+
+    useEffect(() => {
+        onLoadData();
+    }, []);
 
     return (
         <div>
@@ -19,28 +59,18 @@ export default function HomeHeader() {
                                     Libra<span className="text-main">Novel</span>
                                 </h1>
                             </div>
-                            <div className="hidden bg-search rounded gap-1 py-1.5 px-3 md:flex">
-                                <Search className="text-gray-400 z-20 w-4" />
-                                <input
-                                    type="text"
-                                    className="bg-transparent text-sm text-white w-96 z-0 focus:shadow focus:outline-none"
-                                    placeholder="Tìm truyện..."
-                                />
-                            </div>
+                            <SearchComponent data={novels} />
                             <div className="hidden md:block">
-                                <div className="ml-10 flex items-baseline space-x-4">
+                                <div className="ml-10 flex items-center space-x-4">
                                     <Link
                                         href="/"
                                         className="cursor-pointer text-white font-normal text-md px-3 hover:text-main transition-all duration-500"
                                     >
                                         Trang chủ
                                     </Link>
-                                    <Link
-                                        href="/"
-                                        className="cursor-pointer hover:text-main text-white font-normal px-3 transition-all duration-500"
-                                    >
+                                    <GenreNav>
                                         Thể loại
-                                    </Link>
+                                    </GenreNav>
                                     <Link
                                         href="/"
                                         className="cursor-pointer hover:text-main text-white font-normal px-3 transition-all duration-500"
@@ -55,21 +85,31 @@ export default function HomeHeader() {
                                         Sáng tác
                                     </Link>
 
-                                    <div className="flex items-center">
-                                        <Link
-                                            href="/login"
-                                            className="cursor-pointer text-white font-medium transition-all duration-500 hover:text-main"
-                                        >
-                                            Đăng nhập
-                                        </Link>
-                                        <Tally1Icon className={`ml-3 size-5 text-white`} />
-                                        <Link
-                                            href="/register"
-                                            className="cursor-pointer font-medium rounded bg-red-300 py-1 px-4 hover:bg-transparent transition-all duration-500 hover:text-white hover:border-2 border-2 border-transparent hover:border-white"
-                                        >
-                                            Đăng ký
-                                        </Link>
-                                    </div>
+                                    {
+                                        status === "authenticated"
+                                            ?
+                                            <div className="flex items-center gap-2 text-white">
+                                                <Bell className="w-5 cursor-pointer" />
+                                                <UserNav isHome />
+                                            </div>
+                                            :
+
+                                            <div className="flex items-center">
+                                                <Link
+                                                    href="/login"
+                                                    className="cursor-pointer text-white font-medium transition-all duration-500 hover:text-main"
+                                                >
+                                                    Đăng nhập
+                                                </Link>
+                                                <Tally1Icon className={`ml-3 size-5 text-white`} />
+                                                <Link
+                                                    href="/register"
+                                                    className="cursor-pointer font-medium rounded bg-red-300 py-1 px-4 hover:bg-transparent transition-all duration-500 hover:text-white hover:border-2 border-2 border-transparent hover:border-white"
+                                                >
+                                                    Đăng ký
+                                                </Link>
+                                            </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -131,7 +171,7 @@ export default function HomeHeader() {
                     leave="transition ease-in duration-75 transform"
                     leaveFrom="opacity-100 scale-100"
                     leaveTo="opacity-0 scale-95"
-                    
+
                 >
                     {() => (
                         <div className="md:hidden relative z-10" id="mobile-menu">
@@ -145,12 +185,9 @@ export default function HomeHeader() {
                                 >
                                     Trang chủ
                                 </Link>
-                                <Link
-                                    href="/"
-                                    className="cursor-pointer text-white hover:bg-blue-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                                >
+                                <GenreNav>
                                     Thể loại
-                                </Link>
+                                </GenreNav>
 
                                 <Link
                                     href="/"
@@ -165,12 +202,32 @@ export default function HomeHeader() {
                                     Sáng tác
                                 </Link>
 
-                                <Link
-                                    href="/login"
-                                    className="cursor-pointer text-white hover:bg-blue-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                                >
-                                    Đăng nhập
-                                </Link>
+                                {
+                                    status === "authenticated"
+                                        ?
+                                        <>
+                                            <Link
+                                                href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/dashboard/user/profile/${encodeEmailToNumber(session.user?.email)}`}
+                                                className="cursor-pointer text-white hover:bg-blue-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                                            >
+                                                Trang cá nhân
+                                            </Link>
+                                            <Link
+                                                href="#"
+                                                onClick={handleSignOut}
+                                                className="cursor-pointer text-white hover:bg-blue-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                                            >
+                                                Đăng xuất
+                                            </Link>
+                                        </>
+                                        :
+                                        <Link
+                                            href="/login"
+                                            className="cursor-pointer text-white hover:bg-blue-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                                        >
+                                            Đăng nhập
+                                        </Link>
+                                }
                             </div>
                         </div>
                     )}

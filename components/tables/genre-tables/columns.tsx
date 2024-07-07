@@ -2,9 +2,9 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Genre } from '@/types';
+import { Genre, PermissionStates } from '@/types';
 
-export const columns: ColumnDef<Genre>[] = [
+export const columns = (permissions: PermissionStates): ColumnDef<Genre>[] => [
     {
         id: 'select',
         header: ({ table }) => (
@@ -34,6 +34,6 @@ export const columns: ColumnDef<Genre>[] = [
     },
     {
         id: 'actions',
-        cell: ({ row }) => <CellAction data={row.original} />
+        cell: ({ row }) => <CellAction data={row.original} permissions={permissions} />
     }
 ];

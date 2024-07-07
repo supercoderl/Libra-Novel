@@ -17,6 +17,7 @@ export default function NovelPlayGround() {
     const { novelId } = useParams();
     const [novel, setNovel] = useState(null);
 
+    //Load single novel
     const onLoadData = async (id: number) => {
         await fetchNovelByID(id).then((value) => {
             if (value && value.succeeded && value.data) {
@@ -39,7 +40,9 @@ export default function NovelPlayGround() {
 
             <img className="mt-10" src="https://4kwallpapers.com/images/wallpapers/anime-girl-3840x1080-10022.jpg" alt="" />
 
-            <CommentSection />
+            <CommentSection 
+                novelID={Number(novelId)}
+            />
 
         </MainLayout>
     )

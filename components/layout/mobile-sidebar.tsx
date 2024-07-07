@@ -1,9 +1,10 @@
 'use client';
 import { DashboardNav } from '@/components/dashboard-nav';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { navItems } from '@/constants/data';
+import { MenuContext } from '@/contexts/AppProvider';
 import { MenuIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import Spinner from '../ui/spinner';
 
 // import { Playlist } from "../data/playlists";
 
@@ -13,6 +14,8 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function MobileSidebar({ className }: SidebarProps) {
     const [open, setOpen] = useState(false);
+    const { menus, loading } = useContext(MenuContext);
+
     return (
         <>
             <Sheet open={open} onOpenChange={setOpen}>
@@ -23,14 +26,20 @@ export function MobileSidebar({ className }: SidebarProps) {
                     <div className="space-y-4 py-4">
                         <div className="px-3 py-2">
                             <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-                                Overview
+                                Tổng quan
                             </h2>
                             <div className="space-y-1">
-                                <DashboardNav
-                                    items={navItems}
-                                    isMobileNav={true}
-                                    setOpen={setOpen}
-                                />
+                                {
+                                    loading ?
+                                        <Spinner className='w-12 h-12 m-auto' />
+                                        :
+                                        <DashboardNav
+                                            items={menus}
+                                            isMobileNav={true}
+                                            setOpen={setOpen}
+                                        />
+                                }
+
                             </div>
                         </div>
                     </div>

@@ -3,8 +3,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 import { User } from '@/constants/data';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { PermissionStates } from '@/types';
 
-export const columns: ColumnDef<User>[] = [
+export const columns = (permissions: PermissionStates):ColumnDef<User>[] => [
     {
         id: 'select',
         header: ({ table }) => (
@@ -26,28 +28,29 @@ export const columns: ColumnDef<User>[] = [
     },
     {
         accessorKey: 'email',
-        header: 'EMAIL'
+        header: 'Email'
     },
     {
         accessorKey: 'firstName',
-        header: 'TÊN'
+        header: 'Tên'
     },
     {
         accessorKey: 'lastName',
-        header: 'HỌ'
+        header: 'Họ'
     },
     {
         accessorKey: 'gender',
-        header: 'GIỚI TÍNH',
+        header: 'Giới tính',
         cell: ({ row }) => row.original.gender === "Male" ? "Nam" : row.original.gender === "Female" ? "Nữ" : "Khác"
     },
     {
         accessorKey: 'isActive',
-        header: 'TRẠNG THÁI',
-        cell: ({ row }) => row.original.isActive === 1 ? "Kích hoạt" : "Bị khóa"
+        header: 'Trạng thái',
+        cell: ({ row }) => row.original.isActive === 1 ?
+            <Badge className='bg-orange-500 py-1'>Kích hoạt</Badge> : <Badge className='bg-blue-500 py-1'>Bị khóa</Badge>
     },
     {
         id: 'actions',
-        cell: ({ row }) => <CellAction data={row.original} />
+        cell: ({ row }) => <CellAction data={row.original} permissions={permissions} />
     }
 ];

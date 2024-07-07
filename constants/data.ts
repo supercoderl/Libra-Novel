@@ -1,32 +1,3 @@
-import { NavItem } from "@/types";
-
-export const navItems: NavItem[] = [
-    {
-        title: 'Bảng điều khiển',
-        href: '/dashboard',
-        icon: 'dashboard',
-        label: 'Bảng điều khiển'
-    },
-    {
-        title: 'Người dùng',
-        href: '/dashboard/user',
-        icon: 'profile',
-        label: 'Người dùng'
-    },
-    {
-        title: 'Thư viện',
-        href: '/dashboard/library',
-        icon: 'library',
-        label: 'Thư viện'
-    },
-    {
-        title: 'Thể loại',
-        href: '/dashboard/genre',
-        icon: 'category',
-        label: 'Thể loại'
-    }
-];
-
 export type User = {
     userID: string;
     email: string;

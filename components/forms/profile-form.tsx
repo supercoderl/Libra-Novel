@@ -1,6 +1,6 @@
 'use client';
 import * as z from 'zod';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -22,17 +21,13 @@ import {
     SelectValue
 } from '@/components/ui/select';
 import { useToast } from '../ui/use-toast';
-import { AlertModal } from '../modal/alert-modal';
-import { editUser } from '@/app/actions/userActions';
+import useAxios from '@/hooks/useAxios';
 
 const formSchema = z.object({
     email: z
         .string()
         .email({ message: 'Hãy nhập đúng định dạng email' })
         .min(3, { message: 'Email phải ít nhất 3 ký tự' }),
-    passwordHash: z
-        .string()
-        .min(6, { message: 'Mật khẩu phải ít nhất 6 ký tự' }),
     firstName: z
         .string()
         .min(3, { message: 'Tên người dùng phải ít nhất 3 ký tự' }),
@@ -46,23 +41,24 @@ type ProfileFormValue = z.infer<typeof formSchema>;
 
 interface ProfileFormProps {
     initialData: any | null;
+    loading: boolean;
+    setLoading: Dispatch<SetStateAction<boolean>>
 }
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({
-    initialData
+    initialData,
+    loading,
+    setLoading
 }) => {
     const { toast } = useToast();
-    const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const toastMessage = initialData ? 'User updated.' : 'User created.';
+    const toastMessage = 'Cập nhật thành công';
+    const axios = useAxios();
 
     const defaultValues = initialData || {
         email: '',
         firstName: '',
         lastName: '',
-        passwordHash: '',
         gender: '',
-        isActive: ''
     };
 
     const form = useForm<ProfileFormValue>({
@@ -70,37 +66,36 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         defaultValues
     });
 
+    //Init
     useEffect(() => {
         if (initialData) {
             form.setValue("email", initialData.email);
             form.setValue("firstName", initialData.firstName);
-            form.setValue("passwordHash", initialData.passwordHash);
             form.setValue("lastName", initialData.lastName);
             form.setValue("gender", initialData.gender);
         }
     }, [initialData]);
 
+    //Submit form
     const onSubmit = async (data: ProfileFormValue) => {
         try {
             setLoading(true);
             if (initialData) {
                 const body = {
                     userID: initialData.userID,
-                    status: initialData.status,
+                    avatar: initialData.avatar,
+                    isActive: initialData.isActive === 1 ? true : false,
                     ...data
                 };
 
-                const { passwordHash, ...removePasswordInBody } = body;
-
-                await editUser(removePasswordInBody).then((value) => {
-                    console.log(value);
-                    // if (value && value.succeeded) {
-                    //     toast({
-                    //         variant: 'default',
-                    //         title: 'Chúc mừng.',
-                    //         description: 'Cập nhật thông tin người dùng thành công.'
-                    //     });
-                    // }
+                await axios.put(`/update-information`, body).then(({ data }) => {
+                    if (data && data.succeeded) {
+                        toast({
+                            variant: 'default',
+                            title: 'Chúc mừng.',
+                            description: toastMessage
+                        });
+                    }
                 });
             }
         } catch (error: any) {

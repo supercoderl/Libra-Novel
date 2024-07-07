@@ -50,8 +50,44 @@ export async function createNewUser(body: any): Promise<Response | null> {
     }
 }
 
-export async function editUser(body: any): Promise<Response | null> {
-    const url = `/update-information/${body.userID}`;
+export async function editUser(userID: string, body: any): Promise<Response | null> {
+    const url = `/update-user/${userID}`;
+
+    try {
+        const { data } = await api.put<Response>(url, body, { headers: { 'Content-Type': 'multipart/form-data' } });
+        return data;
+    } catch (error: any) {
+        ErrorLogger(url, error);
+        throw new Error(error.message);
+    }
+}
+
+export async function editInformation(body: any): Promise<Response | null> {
+    const url = `/update-information`;
+
+    try {
+        const { data } = await api.put<Response>(url, body);
+        return data;
+    } catch (error: any) {
+        ErrorLogger(url, error);
+        throw new Error(error.message);
+    }
+}
+
+export async function changeAvatar(userID: string, body: any): Promise<Response | null> {
+    const url = `/change-avatar/${userID}`;
+
+    try {
+        const { data } = await api.put<Response>(url, body, { headers: { 'Content-Type': 'multipart/form-data' } });
+        return data;
+    } catch (error: any) {
+        ErrorLogger(url, error);
+        throw new Error(error.message);
+    }
+}
+
+export async function changePassword(body: any): Promise<Response | null> {
+    const url = `/change-password`;
 
     try {
         const { data } = await api.put<Response>(url, body);

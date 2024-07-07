@@ -10,16 +10,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import GoogleSignInButton from '../github-auth-button';
+import { SocialSignInButton } from '../auth-button';
 import { useToast } from '../ui/use-toast';
 import React from 'react';
 import { RadioBox } from '../ui/radio';
 import { genders } from '@/constants/gender';
-import { createNewUser } from '@/app/actions/userActions';
+import Spinner from '../ui/spinner';
+import useAxios from '@/hooks/useAxios';
 
 const formSchema = z.object({
     email: z.string().email({ message: 'Enter a valid email address' }),
@@ -41,13 +42,16 @@ export const UserAuthForm = ({ state }: { state: string }) => {
         lastName: 'Nguyễn Văn',
         gender: 'Male'
     };
+    const axios = useAxios();
+
     const form = useForm<UserFormValue>({
         resolver: zodResolver(formSchema),
         defaultValues
     });
 
+    //Submit form
     const onSubmit = async (data: UserFormValue) => {
-        // setLoading(true);
+        setLoading(true);
         if (state.includes("login")) {
             signIn('credentials', {
                 email: data.email,
@@ -65,18 +69,17 @@ export const UserAuthForm = ({ state }: { state: string }) => {
                 // else {
                 //     router.push("http://localhost:3000/");
                 // }
-            });
+            }).finally(() => setTimeout(() => setLoading(false), 300));
         }
         else {
-            await createNewUser({
+            await axios.post(`/register`, {
                 email: data.email,
                 passwordHash: data.password,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 gender: data.gender,
-            }).then((value) => {
-                console.log(value);
-                if (value && value.succeeded) {
+            }).then(({ data }) => {
+                if (data && data.succeeded) {
                     toast({
                         variant: 'default',
                         title: 'Chúc mừng.',
@@ -196,8 +199,13 @@ export const UserAuthForm = ({ state }: { state: string }) => {
                         )
                     }
 
-                    <Button disabled={loading} className="ml-auto w-full" type="submit">
-                        {state.includes("login") ? "Đăng nhập" : "Đăng ký"}
+                    <Button disabled={loading} className="ml-auto w-full bg-main text-white hover:bg-blue-500" type="submit">
+                        {
+                            loading ?
+                                <Spinner className='w-5 h-5 m-auto' />
+                                :
+                                state.includes("login") ? "Đăng nhập" : "Đăng ký"
+                        }
                     </Button>
                 </form >
             </Form >
@@ -211,7 +219,9 @@ export const UserAuthForm = ({ state }: { state: string }) => {
                     </span>
                 </div>
             </div>
-            <GoogleSignInButton />
+            <SocialSignInButton type='facebook' />
+            <SocialSignInButton type='google' />
+            <SocialSignInButton type='apple' />
         </>
     );
 }

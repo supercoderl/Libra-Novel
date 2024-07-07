@@ -2,12 +2,12 @@ import * as React from 'react';
 
 export interface UploadProps {
     url: string;
-    onChange?: React.ChangeEventHandler<HTMLInputElement>; 
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
     type: string;
     accept: string;
 }
 
-const Upload = React.forwardRef<HTMLInputElement, UploadProps>(
+const Upload: React.FC<UploadProps> = (
     ({ onChange, url, type, accept }) => {
         const inputFileRef = React.useRef<HTMLInputElement>(null);
 
@@ -18,7 +18,7 @@ const Upload = React.forwardRef<HTMLInputElement, UploadProps>(
         };
 
         return (
-            <div onClick={handleDivClick} id="dropZoon" className="group relative h-full flex justify-center items-center flex-col border-2 border-dashed border-blue-300 rounded-md cursor-pointer duration-500 transition hover:border-blue-500">
+            <div onClick={handleDivClick} id="dropZoon" className="group relative h-64 md:h-full flex justify-center items-center flex-col border-2 border-dashed border-blue-300 rounded-md cursor-pointer duration-500 transition hover:border-blue-500">
                 <span className="group-hover:opacity-0.7 flex text-2xl text-blue-300 transition duration-500">
                     <i className='bx bxs-file-image'></i>
                 </span>
