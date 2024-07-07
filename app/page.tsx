@@ -31,7 +31,7 @@ export default function Page() {
 
     return (
         <MainLayout>
-            <Hero novels={novels} />
+            <Hero novels={novels} loading={loading} />
 
             <Section
                 isCategory
