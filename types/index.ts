@@ -77,6 +77,7 @@ export type HomeSectionProps = {
   title: string;
   categories?: any[];
   novels: Novel[];
+  loading: boolean;
 }
 
 export type Novel = {

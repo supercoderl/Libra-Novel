@@ -6,10 +6,11 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/ui/spinner";
 SwiperCore.use([Pagination]);
 
 export default function Section(props: HomeSectionProps) {
-    const { isCarousel = false, isCategory = false, overrideClass = null, isMore = true } = props;
+    const { isCarousel = false, isCategory = false, overrideClass = null, isMore = true, loading } = props;
     const [swiper, setSwiper] = useState<SwiperCore | null>(null);
 
     return (
@@ -93,7 +94,13 @@ export default function Section(props: HomeSectionProps) {
                 }
             </div>
 
-            {props.novels && props.novels.length <= 0 && <p className="text-white text-center">Không có dữ liệu</p>}
+            {loading ?
+                <div className="w-full py-10">
+                    <Spinner className="w-12 h-12 m-auto" />
+                </div>
+                :
+                props.novels && props.novels.length <= 0 && <p className="text-white text-center">Không có dữ liệu</p>
+            }
 
             {
                 isCarousel ?
