@@ -1,6 +1,5 @@
 "use client"
 
-import jujutsu from "@/public/assets/images/manga/jujutsu.jpg";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
