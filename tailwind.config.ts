@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import plugin from 'tailwindcss/plugin';
 module.exports = {
   darkMode: ['class'],
   content: [
@@ -88,5 +89,30 @@ module.exports = {
       }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [
+    require('tailwindcss-animate'),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.line-clamp-1': {
+          overflow: 'hidden',
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+          '-webkit-line-clamp': '1',
+        },
+        '.line-clamp-2': {
+          overflow: 'hidden',
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+          '-webkit-line-clamp': '2',
+        },
+        '.line-clamp-3': {
+          overflow: 'hidden',
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+          '-webkit-line-clamp': '3',
+        },
+        // Thêm các lớp khác nếu cần
+      });
+    }),
+  ]
 };

@@ -27,10 +27,10 @@ const Hero: React.FC<{ novels: Novel[] }> = ({ novels }) => {
                             bulletClass: 'swiper-pagination-bullet !w-2 !h-2 !bg-yellow-400',
                         }}
                         enabled
-                        autoplay={{
-                            delay: 2000,
-                            disableOnInteraction: false,
-                        }}
+                        // autoplay={{
+                        //     delay: 2000,
+                        //     disableOnInteraction: false,
+                        // }}
                         modules={[Autoplay, Pagination, Navigation]}
                         loop
                         className="rounded-lg h-full"
@@ -41,17 +41,17 @@ const Hero: React.FC<{ novels: Novel[] }> = ({ novels }) => {
                                     <div className="h-full relative rounded-lg">
                                         <Image className="h-full brightness-50 rounded-lg" src={hero.img} alt={hero.img_des} />
                                         <div className="absolute text-white bottom-0 left-0 p-4 md:p-12 w-max">
-                                            <div className="w-full max-w-[350px] overflow-hidden flex flex-col gap-1 md:gap-3">
-                                                <h3 className="text-xl md:text-4xl font-semibold">{hero.title}</h3>
-                                                <p className="font-medium text-sm md:text-md">EP {hero.chap_num} - {hero.chap_num}m</p>
+                                            <div className="w-full max-w-[250px] md:max-w-[450px] flex flex-col gap-1 md:gap-3">
+                                                <h3 className="text-md md:text-4xl font-semibold">{hero.title}</h3>
+                                                <p className="font-medium text-xs md:text-md">Chương {hero.chap_num} - {hero.chap_num}</p>
                                                 <div className="flex font-semibold text-sm text-black uppercase gap-2">
                                                     {
                                                         hero.types.length > 0 && hero.types.map((type, index) => (
-                                                            <span key={index} className="bg-violet-300 py-0.5 md:py-1 px-2 rounded-sm text-xs md:text-md">{type}</span>
+                                                            <span key={index} className="bg-violet-300 py-0 md:py-1 px-1 md:px-2 rounded-sm text-[10px] md:text-xs md:text-md">{type}</span>
                                                         ))
                                                     }
                                                 </div>
-                                                <p className="break-words text-sm">{hero.des}</p>
+                                                <p className="break-words text-xs md:text-sm line-clamp-2 md:line-clamp-3">{hero.des}</p>
                                             </div>
                                         </div>
                                     </div>
