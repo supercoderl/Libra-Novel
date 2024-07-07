@@ -158,7 +158,7 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({ initialData, per
                 {initialData && (
                     <div className='flex gap-1.5 items-center'>
                         <Button
-                            className=" bg-green-600 w-8 h-8 p-0"
+                            className="bg-green-600 w-8 h-8 p-0"
                             onClick={() => router.back()}
                         >
                             <Undo2 className="m-auto" />
@@ -167,9 +167,10 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({ initialData, per
                             disabled={loading}
                             variant="destructive"
                             size="sm"
+                            className="w-8 h-8 p-0"
                             onClick={() => setOpen(true)}
                         >
-                            <Trash className="h-4 w-4" />
+                            <Trash className="m-auto" />
                         </Button>
                     </div>
                 )}

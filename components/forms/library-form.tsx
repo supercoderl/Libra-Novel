@@ -215,7 +215,7 @@ export const NovelForm: React.FC<NovelFormProps> = ({ initialData }) => {
                 {initialData && (
                     <div className='flex gap-1.5 items-center'>
                         <Button
-                            className=" bg-green-600 w-8 h-8 p-0"
+                            className="bg-green-600 w-8 h-8 p-0"
                             onClick={() => router.back()}
                         >
                             <Undo2 className="m-auto" />
@@ -223,10 +223,11 @@ export const NovelForm: React.FC<NovelFormProps> = ({ initialData }) => {
                         <Button
                             disabled={loading}
                             variant="destructive"
+                                    className="w-8 h-8 p-0"
                             size="sm"
                             onClick={() => setOpen(true)}
                         >
-                            <Trash className="h-4 w-4" />
+                            <Trash className="m-auto" />
                         </Button>
                     </div>
                 )}
