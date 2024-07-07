@@ -12,7 +12,7 @@ import { fetchAllNovels } from "./actions/libraryActions";
 import { Novel } from "@/types";
 import { shuffleArray, weeks } from "@/utils/array";
 
-export default function page() {
+export default function Page() {
 
     const [novels, setNovels] = useState([]);
 
