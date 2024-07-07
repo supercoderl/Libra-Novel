@@ -68,7 +68,7 @@ export default function Chapter() {
                             <SelectTrigger>
                                 <SelectValue
                                     defaultValue={"0"}
-                                    placeholder="Chọn chương"
+                                    placeholder="Chương"
                                     className="text-white truncate"
                                 />
                             </SelectTrigger>
