@@ -1,8 +1,8 @@
 import ThemeToggle from '@/components/layout/theme-toggle/theme-toggle';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { MobileSidebar } from './mobile-sidebar';
 import UserNav from './user-nav';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
     return (
