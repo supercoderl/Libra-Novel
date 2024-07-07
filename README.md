@@ -15,21 +15,21 @@
     <img src="./public/assets/images/logo/libra.png" alt="Logo" width="80" height="80">
   </a>
 
-    <h1 className="font-bold text-xl cursor-pointer text-white">
-        Libra<span className="text-main">Novel</span>
-    </h1>
+  <h1 className="font-bold text-xl cursor-pointer text-white">
+    Libra<span className="text-main">Novel</span>
+  </h1>
 
   <p align="center">
     A website project for reading stories and novels
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/supercoderl/Libra-Novel"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://libra-novel.vercel.app/">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/supercoderl/Libra-Novel/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/supercoderl/Libra-Novel/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -53,11 +53,9 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -66,7 +64,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://res.cloudinary.com/dcystvroz/image/upload/v1720360162/porsiljwy6zaci2hhmgx.png)
 
 Welcome, and thank you for joining us today. It gives me immense pleasure to introduce you to a project that is very close to my heart: the Libra Novel website.
 
@@ -80,8 +78,6 @@ For writers, Libra Novel provides a supportive community and a platform to showc
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 ### Built With
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
@@ -90,12 +86,11 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * [![React][React.js]][React-url]
 * [![Tailwind][Tailwind.css]][Tailwind-url]
 * [![RadixUI][Radix.ui]][Radix-url]
-* [![TypeScript][TypeScript.ts][TypeScript-url]]
+* [![TypeScript][TypeScript.ts]][TypeScript-url]
 * [![Swiper][Swiper.ui]][Swiper-url]
 * [![Lucide][Lucide.icon]][Lucide-url]
 * [![Axios][Axios.api]][Axios-url]
 * [![Vercel][Vercel.host]][Vercel-url]
-* [![Tanstack][Tanstack.ui]][Tanstack-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -142,7 +137,7 @@ _Below is an example of how you can instruct your audience on installing and set
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more examples, please refer to the [Documentation](https://github.com/supercoderl/Libra-Novel)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
