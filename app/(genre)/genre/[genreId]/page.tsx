@@ -57,6 +57,7 @@ const GenrePage = () => {
                             isMore={false}
                             title=""
                             novels={novels}
+                            loading={loading}
                             overrideClass="my-8 md:my-16"
                         />
                         <Pagination 
