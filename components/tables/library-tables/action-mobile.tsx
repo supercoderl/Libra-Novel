@@ -36,24 +36,24 @@ export const ActionMobile: React.FC<ActionProps> = ({ data, permissions }) => {
             <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-5 w-5 p-0">
-                        <span className="sr-only">Open menu</span>
+                        <span className="sr-only">Mở menu</span>
                         <EllipsisVertical className="h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuLabel>Hành động</DropdownMenuLabel>
 
                     <DropdownMenuItem
                         onClick={() => router.push(`/dashboard/library/edit?novelID=${data.novelID}`)}
                         disabled={!permissions.canEdit}
                     >
-                        <Edit className="mr-2 h-4 w-4" /> Update
+                        <Edit className="mr-2 h-4 w-4" /> Cập nhật
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => setOpen(true)}
                         disabled={!permissions.canDelete}
                     >
-                        <Trash className="mr-2 h-4 w-4" /> Delete
+                        <Trash className="mr-2 h-4 w-4" /> Xóa
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
