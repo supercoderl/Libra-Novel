@@ -14,4 +14,12 @@ export default auth((req) => {
     // }
 });
 
-export const config = { matcher: ['/:path*'] };
+export const createMiddleware = ({
+    //Add locales you want in the app
+    locales: ['en', 'vi'],
+
+    // default locale if no match
+    defaultLocale: 'en'
+});
+
+export const config = { matcher: ['/(vi|en)/:path*'] };

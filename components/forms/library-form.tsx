@@ -159,9 +159,9 @@ export const NovelForm: React.FC<NovelFormProps> = ({ initialData }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
+            await axios.delete(`/delete-novel/${initialData.novelID}`);
             router.refresh();
-            router.push(`/${params.storeId}/library`);
+            router.push(`/dashboard/library`);
         } catch (error: any) {
         } finally {
             setLoading(false);
@@ -223,7 +223,7 @@ export const NovelForm: React.FC<NovelFormProps> = ({ initialData }) => {
                         <Button
                             disabled={loading}
                             variant="destructive"
-                                    className="w-8 h-8 p-0"
+                            className="w-8 h-8 p-0"
                             size="sm"
                             onClick={() => setOpen(true)}
                         >

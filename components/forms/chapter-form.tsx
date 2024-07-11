@@ -130,9 +130,9 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({ initialData, novelID }
     const onDelete = async () => {
         try {
             setLoading(true);
-            //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
+            await axios.delete(`/delete-chapter/${initialData.chapterID}`);
             router.refresh();
-            router.push(`/${params.storeId}/library`);
+            router.push(`/dashboard/library/${novelID}/chapter`);
         } catch (error: any) {
         } finally {
             setLoading(false);

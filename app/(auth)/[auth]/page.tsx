@@ -92,7 +92,7 @@ export default function LoginPage() {
                                 'Bạn chưa có tài khoản?'
                                 :
                                 'Bạn đã có tài khoản?'}
-                            <a className='text-red-600' href={pathName.includes("login") ? '/register' : '/login'}>
+                            <a className='text-red-600' href={pathName.includes("login") ? `/register` : `/login`}>
                                 {pathName.includes("login") ? ' Đăng ký ngay!' : ' Đăng nhập ngay!'}
                             </a>
                         </p>

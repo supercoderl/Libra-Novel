@@ -101,3 +101,15 @@
 .rct-collapse *, .rct-checkbox *, .rct-node-icon * {
     width: 18px !important;
 }
+
+.direct-left {
+    direction: ltr;
+}
+
+.direct-right {
+    direction: rtl;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}

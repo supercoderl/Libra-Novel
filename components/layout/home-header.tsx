@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { Bell, Search, Tally1Icon } from "lucide-react";
+import { Bell, Tally1Icon } from "lucide-react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import UserNav from "./user-nav";
@@ -96,14 +96,14 @@ export default function HomeHeader() {
 
                                             <div className="flex items-center">
                                                 <Link
-                                                    href="/login"
+                                                    href={`/login`}
                                                     className="cursor-pointer text-white font-medium transition-all duration-500 hover:text-main"
                                                 >
                                                     Đăng nhập
                                                 </Link>
                                                 <Tally1Icon className={`ml-3 size-5 text-white`} />
                                                 <Link
-                                                    href="/register"
+                                                    href={`/register`}
                                                     className="cursor-pointer font-medium rounded bg-red-300 py-1 px-4 hover:bg-transparent transition-all duration-500 hover:text-white hover:border-2 border-2 border-transparent hover:border-white"
                                                 >
                                                     Đăng ký
@@ -222,7 +222,7 @@ export default function HomeHeader() {
                                         </>
                                         :
                                         <Link
-                                            href="/login"
+                                            href={`/login`}
                                             className="cursor-pointer text-white hover:bg-blue-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                                         >
                                             Đăng nhập

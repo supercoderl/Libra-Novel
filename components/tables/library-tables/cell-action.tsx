@@ -8,6 +8,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import useAxios from '@/hooks/useAxios';
 import { Novel, PermissionStates } from '@/types';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -22,8 +23,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data, permissions }) => 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const router = useRouter();
+    const axios = useAxios();
 
-    const onConfirm = async () => { };
+    //Delete item
+    const onConfirm = async () => {
+        try {
+            setLoading(true);
+            await axios.delete(`/delete-novel/${data.novelID}`);
+            router.refresh();
+            router.push(`/dashboard/library`);
+        } catch (error: any) {
+        } finally {
+            setLoading(false);
+            setOpen(false);
+        }
+    };
 
     return (
         <>

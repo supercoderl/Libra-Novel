@@ -29,6 +29,7 @@ import { AlertModal } from '../modal/alert-modal';
 import { Upload } from '../ui/upload';
 import useAxios from '@/hooks/useAxios';
 import { MultiSelect } from '../ui/multi-select';
+import { encodeEmailToNumber } from '@/utils/text';
 
 const formSchema = z.object({
     email: z
@@ -115,6 +116,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                 formData.append('email', initialData.email);
                 formData.append('firstName', data.firstName);
                 formData.append('lastName', data.lastName);
+                formData.append('userCode', initialData.userCode);
                 formData.append('gender', data.gender);
                 formData.append('avatar', initialData.avatar);
                 formData.append('isActive', data.isActive === '1' ? 'true' : 'false');
@@ -131,7 +133,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                     }
                 });
             } else {
-                await axios.post(`/register`, data).then(({ data }) => {
+                await axios.post(`/register`, { ...data, userCode: encodeEmailToNumber(data.email) }).then(({ data }) => {
                     if (data && data.succeeded) {
                         toast({
                             variant: 'default',
@@ -158,9 +160,9 @@ export const UserForm: React.FC<UserFormProps> = ({
     const onDelete = async () => {
         try {
             setLoading(true);
-            //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
+            await axios.delete(`/delete-user/${initialData.userID}`);
             router.refresh();
-            router.push(`/${params.storeId}/user`);
+            router.push(`/dashboard/user`);
         } catch (error: any) {
         } finally {
             setLoading(false);
@@ -224,7 +226,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                             disabled={loading}
                             variant="destructive"
                             size="sm"
-                                    className="w-8 h-8 p-0"
+                            className="w-8 h-8 p-0"
                             onClick={() => setOpen(true)}
                         >
                             <Trash className="m-auto" />

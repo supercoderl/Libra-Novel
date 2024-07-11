@@ -8,6 +8,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import useAxios from '@/hooks/useAxios';
 import { NavItem, PermissionStates } from '@/types';
 import { Edit, EllipsisVertical, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -22,8 +23,21 @@ export const ActionMobile: React.FC<ActionProps> = ({ data, permissions }) => {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const router = useRouter();
+    const axios = useAxios();
 
-    const onConfirm = async () => { };
+    //Delete item
+    const onConfirm = async () => {
+        try {
+            setLoading(true);
+            await axios.delete(`/delete-menu/${data.menuID}`);
+            router.refresh();
+            router.push(`/dashboard/menu`);
+        } catch (error: any) {
+        } finally {
+            setLoading(false);
+            setOpen(false);
+        }
+    };
 
     return (
         <>

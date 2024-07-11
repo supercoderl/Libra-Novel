@@ -134,15 +134,7 @@ export const MenuForm: React.FC<MenuFormProps> = ({ initialData }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/delete-menu/${initialData.menuID}`).then(({ data }) => {
-                if (data && data.succeeded) {
-                    toast({
-                        variant: 'default',
-                        title: 'Chúc mừng.',
-                        description: toastMessage
-                    });
-                }
-            });
+            await axios.delete(`/delete-menu/${initialData.menuID}`);
             router.refresh();
             router.push(`/dashboard/menu`);
         } catch (error: any) {

@@ -83,10 +83,16 @@ module.exports = {
       },
       translate: {
         '-1/2': '-50%',
+        'information-right': 'calc(100% - 88px - 15px - 20px)',
+        'information-left': 'calc(-100% + 88px + 15px + 20px)',
       },
       backgroundImage: {
         'custom-radial': 'radial-gradient(circle at 99%, #f4f4f4 10%, grey 70%)'
-      }
+      },
+      direction: {
+        ltr: 'ltr',
+        rtl: 'rtl',
+      },
     }
   },
   plugins: [

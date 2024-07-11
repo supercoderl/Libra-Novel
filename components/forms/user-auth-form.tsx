@@ -21,6 +21,7 @@ import { RadioBox } from '../ui/radio';
 import { genders } from '@/constants/gender';
 import Spinner from '../ui/spinner';
 import useAxios from '@/hooks/useAxios';
+import { encodeEmailToNumber } from '@/utils/text';
 
 const formSchema = z.object({
     email: z.string().email({ message: 'Enter a valid email address' }),
@@ -56,7 +57,8 @@ export const UserAuthForm = ({ state }: { state: string }) => {
             signIn('credentials', {
                 email: data.email,
                 password: data.password,
-                callbackUrl: "/dashboard"
+                callbackUrl: `/dashboard`,
+                redirect: true
             }).then(() => {
                 // if (session && session.user && session.user.roles && session.user.roles.length > 0) {
                 //     if (session.user.roles.some((r: number) => r === 300) || session.user.roles.some((r: number) => r === 200)) {
@@ -77,6 +79,7 @@ export const UserAuthForm = ({ state }: { state: string }) => {
                 passwordHash: data.password,
                 firstName: data.firstName,
                 lastName: data.lastName,
+                userCode: encodeEmailToNumber(data.email),
                 gender: data.gender,
             }).then(({ data }) => {
                 if (data && data.succeeded) {

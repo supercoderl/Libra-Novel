@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/spinner";
 import useAxios from "@/hooks/useAxios";
+import { cn } from "@/lib/utils";
 import { Camera, Clipboard, ClipboardCheck } from "lucide-react";
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
@@ -8,6 +9,7 @@ export interface QuickInfo {
     userID: string,
     avatar?: string,
     fullname?: string,
+    userCode?: string,
     roles?: number[] | null,
     url?: string | null,
     read?: number,
@@ -21,6 +23,7 @@ const QuickInformation: React.FC<QuickInfo> = ({
     userID,
     avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5fYLiizEidYt6bCvSqYFVjwWouiooyxb_Kg&s",
     fullname,
+    userCode,
     roles,
     url,
     read = 0,
@@ -31,7 +34,9 @@ const QuickInformation: React.FC<QuickInfo> = ({
 }) => {
     const avatarRef = useRef<HTMLInputElement>(null);
     const [avatarURL, setAvatarURL] = useState("");
+    const [qrCode, setQrCode] = useState("");
     const [isInClipboard, setTextToClipboard] = useState(false);
+    const [qrCodeLoading, setQrCodeLoading] = useState(true);
     const axios = useAxios();
 
     const handleDivClick = () => {
@@ -68,9 +73,23 @@ const QuickInformation: React.FC<QuickInfo> = ({
         }
     }
 
+    const onGetQRCode = async (userCode: string) => {
+        await axios.post("/generate-qrcode", {
+            userCode,
+        }).then(({ data }) => {
+            if (data && data.succeeded && data.data) {
+                setQrCode(data.data);
+            }
+        }).finally(() => setTimeout(() => setQrCodeLoading(false), 300));
+    }
+
     useEffect(() => {
         setAvatarURL(avatar);
     }, [avatar]);
+
+    useEffect(() => {
+        if (userCode) onGetQRCode(userCode);
+    }, [userCode]);
 
     return (
         <>
@@ -105,17 +124,12 @@ const QuickInformation: React.FC<QuickInfo> = ({
             </div>
 
             <div className="my-5">
-                <div className="flex justify-between items-center border-t-2 w-full py-3 px-4">
-                    <p>Truyện đã xem</p>
-                    <span>{read}</span>
-                </div>
-                <div className="flex justify-between items-center border-y-2 w-full py-3 px-4">
-                    <p>Truyện đã lưu</p>
-                    <span>{bookmarked}</span>
-                </div>
-                <div className="flex justify-between items-center border-b-2 w-full py-3 px-4">
-                    <p>Truyện yêu thích</p>
-                    <span>{favorites}</span>
+                <div className={cn(
+                    "flex justify-between items-center border-y-2 w-full px-4",
+                    qrCodeLoading ? 'py-24' : 'py-3'
+                )}>
+                    {qrCodeLoading && <Spinner className="w-20 h-20 m-auto" />}
+                    {qrCode && <img className="w-2/3 m-auto" src={qrCode} alt="qrcode" />}
                 </div>
             </div>
 

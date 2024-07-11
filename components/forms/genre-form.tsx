@@ -118,9 +118,9 @@ export const GenreForm: React.FC<GenreFormProps> = ({ initialData }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
+            await axios.delete(`/delete-genre/${initialData.genreID}`);
             router.refresh();
-            router.push(`/${params.storeId}/library`);
+            router.push(`/dashboard/genre`);
         } catch (error: any) {
         } finally {
             setLoading(false);

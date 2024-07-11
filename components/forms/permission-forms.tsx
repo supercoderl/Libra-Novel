@@ -127,15 +127,7 @@ export const PermissionForm: React.FC<PermissionFormProps> = ({ initialData, per
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/delete-permission/${initialData.permissionID}`).then(({ data }) => {
-                if (data && data.succeeded) {
-                    toast({
-                        variant: 'default',
-                        title: 'Chúc mừng.',
-                        description: toastMessage
-                    });
-                }
-            });
+            await axios.delete(`/delete-permission/${initialData.permissionID}`);
             router.refresh();
             router.push(`/dashboard/permission`);
         } catch (error: any) {

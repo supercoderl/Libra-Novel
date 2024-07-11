@@ -40,6 +40,7 @@ export type User = {
   avatar: string;
   firstName: string;
   lastName: string;
+  userCode: string | null;
   gender: string;
   isActive: number;
   roles: string[];

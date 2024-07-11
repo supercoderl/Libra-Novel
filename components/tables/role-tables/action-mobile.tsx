@@ -36,13 +36,18 @@ export const ActionMobile: React.FC<ActionProps> = ({ data, permissions }) => {
     const router = useRouter();
     const axios = useAxios();
 
+    //Delete item
     const onConfirm = async () => {
-        setLoading(true);
-        await axios.delete(`/delete-role/${data.roleID}`).finally(() => setTimeout(() => {
+        try {
+            setLoading(true);
+            await axios.delete(`/delete-role/${data.roleID}`);
+            router.refresh();
+            router.push(`/dashboard/role`);
+        } catch (error: any) {
+        } finally {
             setLoading(false);
             setOpen(false);
-        }, 300));
-        router.refresh();
+        }
     };
 
     const onLoadPermissionsTree = async () => {

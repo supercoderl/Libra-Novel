@@ -26,7 +26,9 @@ export default function Page() {
 
     //Load single user
     const onLoadData = async () => {
-        await axios.get(`/get-user-by-id/${userID}`).then(({ data }) => {
+        await axios.get(`/get-user-by-id-or-code`, {
+            params: { userID }
+        }).then(({ data }) => {
             if (data && data.succeeded && data.data) setUser(data.data);
         }).finally(() => setLoading(false));
     }

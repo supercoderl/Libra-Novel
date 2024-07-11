@@ -25,12 +25,14 @@ export default function Page() {
 
     //Load profile identified
     const onLoadData = async () => {
-        await axios.get("/get-profile").then(({ data }) => {
+        await axios.get("/get-profile").then(async ({ data }) => {
             if (data && data.succeeded && data.data) {
                 setUser(data.data);
             }
         }).finally(() => setTimeout(() => setLoading(false), 300));
     }
+
+
 
     //Set state switch to information or password changing
     const handleChooseState = (value: string) => {
@@ -59,6 +61,7 @@ export default function Page() {
                             <QuickInformation
                                 userID={user?.userID!}
                                 fullname={concatName(user?.firstName, user?.lastName)}
+                                userCode={user?.userCode || "error"}
                                 roles={[100]}
                                 loading={loading}
                                 setLoading={setLoading}

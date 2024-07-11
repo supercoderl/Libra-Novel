@@ -124,15 +124,7 @@ export const RoleForm: React.FC<RoleFormProps> = ({ initialData }) => {
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/delete-role/${initialData.roleID}`).then(({ data }) => {
-                if (data && data.succeeded) {
-                    toast({
-                        variant: 'default',
-                        title: 'Chúc mừng.',
-                        description: toastMessage
-                    });
-                }
-            });
+            await axios.delete(`/delete-role/${initialData.roleID}`);
             router.refresh();
             router.push(`/dashboard/role`);
         } catch (error: any) {
