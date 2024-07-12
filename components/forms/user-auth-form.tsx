@@ -222,9 +222,9 @@ export const UserAuthForm = ({ state }: { state: string }) => {
                     </span>
                 </div>
             </div>
-            <SocialSignInButton type='facebook' />
+            <SocialSignInButton type='github' />
             <SocialSignInButton type='google' />
-            <SocialSignInButton type='apple' />
+            <SocialSignInButton type='discord' />
         </>
     );
 }

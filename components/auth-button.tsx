@@ -22,17 +22,17 @@ export const SocialSignInButton: React.FC<{ type: string }> = ({ type }) => {
         >
             <span className='m-auto flex items-center'>
                 {
-                    type === "facebook"
+                    type === "github"
                         ?
-                        <Icons.facebook className="mr-2 h-4 w-4" />
+                        <Icons.gitHub className="mr-2 h-4 w-4" />
                         :
                         type === "google"
                             ?
                             <Icons.google className="mr-2 h-4 w-4" />
                             :
-                            <Icons.apple className="mr-2 h-4 w-4" />
+                            <Icons.discord className="mr-2 h-4 w-4" />
                 }
-                Continue with {capitalizeFirstLetter(type)}
+                Đăng nhập bằng {capitalizeFirstLetter(type)}
             </span>
         </Button>
     );

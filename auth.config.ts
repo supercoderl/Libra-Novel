@@ -1,13 +1,25 @@
 import { NextAuthConfig, User } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
-import login from './app/actions/authActions';
+import GoogleProvider from 'next-auth/providers/google';
+import DiscordProvider from 'next-auth/providers/discord';
+import { login, loginByProvider } from './app/actions/authActions';
+import { encodeEmailToNumber } from './utils/text';
 
 const authConfig: NextAuthConfig = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? '',
       clientSecret: process.env.GITHUB_SECRET ?? ''
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID ?? '',
+      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? '',
     }),
     CredentialProvider({
       credentials: {
@@ -48,6 +60,34 @@ const authConfig: NextAuthConfig = {
   },
   session: { strategy: 'jwt' },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log(profile);
+      if(account?.provider)
+      {
+        const res = await loginByProvider({
+          email: profile?.email,
+          userID: String(profile?.id || "password"),
+          avatar: account?.provider === "discord" ? profile?.image_url : account?.provider === "google" ? profile?.picture : profile?.avatar_url,
+          provider: account?.provider,
+          firstName: account?.provider === "google" ? profile?.family_name : account?.provider === "discord" ? profile?.global_name : profile?.login,
+          lastName: account?.provider === "google" ? profile?.given_name : null,
+          userCode: encodeEmailToNumber(profile?.email)
+        });
+
+        if (res.succeeded) {
+          user.email = res.data.user.email;
+          user.name = res.data.user.fullName;
+          user.accessToken = res.data.accessToken;
+          user.refreshToken = res.data.refreshToken;
+          user.id = res.data.user.userID;
+          user.roles = res.data.user.roles;
+          user.avatar = res.data.user.avatar;
+        }
+
+        return true;
+      }
+      return true;
+    },
     async jwt({ token, user, trigger, session }) {
       const currentTime = Math.floor(Date.now() / 1000);
 

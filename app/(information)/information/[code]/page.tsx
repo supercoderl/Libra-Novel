@@ -1,6 +1,7 @@
 "use client"
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Spinner from "@/components/ui/spinner";
 import useAxios from "@/hooks/useAxios";
 import { cn } from "@/lib/utils";
 import { User } from "@/types";
@@ -13,6 +14,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
     const { code } = useParams();
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<User | null>(null);
     const axios = useAxios();
 
@@ -32,7 +34,7 @@ export default function Page() {
             if (data && data.succeeded && data.data) {
                 setUser(data.data);
             }
-        })
+        }).finally(() => setTimeout(() => setLoading(false), 300));
     }
 
     return (
@@ -53,7 +55,12 @@ export default function Page() {
                 className={cn(
                     "hidden md:block mx-auto my-[50px] w-[500px] h-[500px] rounded-full opacity-80 relative"
                 )}>
-                <img className="w-full h-full rounded-full brightness-50" src={user?.avatar || "https://img.freepik.com/free-vector/digital-technology-background-with-abstract-wave-border_53876-117508.jpg"} alt="avt" />
+                {
+                    loading ?
+                        <Spinner className="w-[500px] h-[500px] border-[12px] m-auto" />
+                        :
+                        <img className="w-full h-full rounded-full brightness-50" src={user?.avatar || "https://img.freepik.com/free-vector/digital-technology-background-with-abstract-wave-border_53876-117508.jpg"} alt="avt" />
+                }
                 <div className="absolute top-[45%] mt-[-30px] w-[80%] left-2/4 -translate-y-2/4	-translate-x-2/4">
                     <h2 className="font-bold text-3xl text-white text-center mt-[100px]">{concatName(user?.firstName, user?.lastName)}</h2>
                 </div>
@@ -123,7 +130,13 @@ export default function Page() {
             </section>
 
             <section className="md:hidden scrollbar-hidden mx-auto my-[50px] w-full overflow-auto">
-                <img className="w-48 h-48 rounded-full mx-auto" src={user?.avatar || "https://img.freepik.com/free-vector/digital-technology-background-with-abstract-wave-border_53876-117508.jpg"} alt="avt" />
+                {
+                    loading ?
+                        <Spinner className="w-36 h-36 m-auto" />
+                        :
+                        <img className="w-48 h-48 rounded-full mx-auto" src={user?.avatar || "https://img.freepik.com/free-vector/digital-technology-background-with-abstract-wave-border_53876-117508.jpg"} alt="avt" />
+
+                }
                 <div>
                     <h2 className="font-bold text-3xl text-center mt-8">{concatName(user?.firstName, user?.lastName)}</h2>
                 </div>
