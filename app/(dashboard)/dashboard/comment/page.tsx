@@ -37,7 +37,6 @@ export default function Page() {
         }).finally(() => setTimeout(() => setLoading(false), 300));
     };
 
-
     //Init calling
     useEffect(() => {
         onLoadData();
@@ -48,9 +47,9 @@ export default function Page() {
     useEffect(() => {
         if (permissions) {
             setPermissionStates({
-                canView: checkPermission(["ViewRoleList"], permissions),
-                canEdit: checkPermission(["UpdateRole"], permissions),
-                canDelete: checkPermission(["DeleteRole"], permissions)
+                canView: checkPermission(["ViewCommentList"], permissions),
+                canEdit: checkPermission(["UpdateComment"], permissions),
+                canDelete: checkPermission(["DeleteComment"], permissions)
             });
         };
     }, [permissions]);
