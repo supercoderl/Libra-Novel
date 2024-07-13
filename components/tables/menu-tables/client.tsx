@@ -8,13 +8,15 @@ import { useRouter } from 'next/navigation';
 import { columns } from './columns';
 import { NavItem, PermissionStates } from '@/types';
 import MenuTable from './table-mobile';
+import Spinner from '@/components/ui/spinner';
 
 interface MenusClientProps {
     data: NavItem[];
+    loading: boolean;
     permissions: PermissionStates;
 }
 
-export const MenuClient: React.FC<MenusClientProps> = ({ data, permissions }) => {
+export const MenuClient: React.FC<MenusClientProps> = ({ data, permissions, loading }) => {
     const router = useRouter();
 
     return (
@@ -48,19 +50,26 @@ export const MenuClient: React.FC<MenusClientProps> = ({ data, permissions }) =>
                 </div>
             </div>
             <Separator />
-            <DataTable
-                className='hidden md:block'
-                searchKey="title"
-                columns={columns}
-                data={data}
-                setPageIndex={() => { }}
-                permissions={permissions}
-            />
-            <MenuTable
-                className='md:hidden'
-                data={data}
-                permissions={permissions}
-            />
+            {
+                loading ?
+                    <Spinner className='w-12 h-12 m-auto' />
+                    :
+                    <>
+                        <DataTable
+                            className='hidden md:block'
+                            searchKey="title"
+                            columns={columns}
+                            data={data}
+                            setPageIndex={() => { }}
+                            permissions={permissions}
+                        />
+                        <MenuTable
+                            className='md:hidden'
+                            data={data}
+                            permissions={permissions}
+                        />
+                    </>
+            }
         </>
     );
 };

@@ -9,16 +9,18 @@ import { columns } from './columns';
 import { Genre, PermissionStates } from '@/types';
 import GenreTable from './table-mobile';
 import { Dispatch, SetStateAction } from 'react';
+import Spinner from '@/components/ui/spinner';
 
 interface GenresClientProps {
     data: Genre[];
     isNext: boolean;
     isPrevious: boolean;
+    loading: boolean;
     setPageIndex: Dispatch<SetStateAction<number>>;
     permissions: PermissionStates;
 }
 
-export const GenreClient: React.FC<GenresClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions }) => {
+export const GenreClient: React.FC<GenresClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions, loading }) => {
     const router = useRouter();
 
     return (
@@ -52,24 +54,31 @@ export const GenreClient: React.FC<GenresClientProps> = ({ data, isNext, isPrevi
                 </div>
             </div>
             <Separator />
-            <DataTable
-                className='hidden md:block'
-                searchKey="name"
-                columns={columns(permissions)}
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
-            <GenreTable
-                className='md:hidden'
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
+            {
+                loading ?
+                    <Spinner className='w-12 h-12 m-auto' />
+                    :
+                    <>
+                        <DataTable
+                            className='hidden md:block'
+                            searchKey="name"
+                            columns={columns(permissions)}
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                        <GenreTable
+                            className='md:hidden'
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                    </>
+            }
         </>
     );
 };

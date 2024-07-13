@@ -9,16 +9,18 @@ import { columns } from './columns';
 import { PermissionStates, Role } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
 import RoleTable from './table-mobile';
+import Spinner from '@/components/ui/spinner';
 
 interface RolesClientProps {
     data: Role[];
     isNext: boolean;
     isPrevious: boolean;
+    loading: boolean;
     setPageIndex: Dispatch<SetStateAction<number>>;
     permissions: PermissionStates;
 }
 
-export const RoleClient: React.FC<RolesClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions }) => {
+export const RoleClient: React.FC<RolesClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions, loading }) => {
     const router = useRouter();
 
     return (
@@ -52,24 +54,31 @@ export const RoleClient: React.FC<RolesClientProps> = ({ data, isNext, isPreviou
                 </div>
             </div>
             <Separator />
-            <DataTable
-                className='hidden md:block'
-                searchKey="name"
-                columns={columns(permissions)}
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
-            <RoleTable
-                className='md:hidden'
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
+            {
+                loading ?
+                    <Spinner className="w-12 h-12 m-auto" />
+                    :
+                    <>
+                        <DataTable
+                            className='hidden md:block'
+                            searchKey="name"
+                            columns={columns(permissions)}
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                        <RoleTable
+                            className='md:hidden'
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                    </>
+            }
         </>
     );
 };

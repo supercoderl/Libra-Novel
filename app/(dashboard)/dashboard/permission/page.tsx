@@ -13,6 +13,7 @@ const breadcrumbItems = [{ title: 'Quyền', link: '/dashboard/permission' }];
 export default function Page() {
     const [pers, setPers] = useState([]);
     const { permissions } = useContext(PermissionsContext);
+    const [loading, setLoading] = useState(true);
     const [permissionStates, setPermissionStates] = useState<PermissionStates>({
         canView: null,
         canEdit: false,
@@ -27,7 +28,7 @@ export default function Page() {
             if (data && data.succeeded && data.data) {
                 setPers(data.data.items);
             }
-        });
+        }).finally(() => setTimeout(() => setLoading(false), 300));
     };
 
     //Init
@@ -56,6 +57,7 @@ export default function Page() {
                         permissionStates.canView === true ?
                         <PermissionClient
                             data={pers}
+                            loading={loading}
                             permissions={permissionStates}
                         />
                         :

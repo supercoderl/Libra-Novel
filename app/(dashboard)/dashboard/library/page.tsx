@@ -14,6 +14,7 @@ export default function Page() {
     const [novels, setNovels] = useState([]);
     const [isNext, setNext] = useState(false);
     const [isPrevious, setPrevious] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pageIndex, setPageIndex] = useState(1);
     const { permissions } = useContext(PermissionsContext);
     const [permissionStates, setPermissionStates] = useState<PermissionStates>({
@@ -34,7 +35,7 @@ export default function Page() {
                 setNext(data.data.next);
                 setPrevious(data.data.previous);
             }
-        });
+        }).finally(() => setTimeout(() => setLoading(false), 300));
     };
 
     //Init
@@ -64,6 +65,7 @@ export default function Page() {
                         <NovelClient
                             data={novels}
                             isNext={isNext}
+                            loading={loading}
                             isPrevious={isPrevious}
                             setPageIndex={setPageIndex}
                             permissions={permissionStates}

@@ -8,13 +8,15 @@ import { useRouter } from 'next/navigation';
 import { columns } from './columns';
 import { Permission, PermissionStates } from '@/types';
 import PermissionTable from './table-mobile';
+import Spinner from '@/components/ui/spinner';
 
 interface PermissionsClientProps {
     data: Permission[];
+    loading: boolean;
     permissions: PermissionStates;
 }
 
-export const PermissionClient: React.FC<PermissionsClientProps> = ({ data, permissions }) => {
+export const PermissionClient: React.FC<PermissionsClientProps> = ({ data, permissions, loading }) => {
     const router = useRouter();
 
     return (
@@ -48,19 +50,26 @@ export const PermissionClient: React.FC<PermissionsClientProps> = ({ data, permi
                 </div>
             </div>
             <Separator />
-            <DataTable
-                className='hidden md:block'
-                searchKey="title"
-                columns={columns(permissions)}
-                data={data}
-                setPageIndex={() => { }}
-                permissions={permissions}
-            />
-            <PermissionTable
-                className='md:hidden'
-                data={data}
-                permissions={permissions}
-            />
+            {
+                loading ?
+                    <Spinner className='w-12 h-12 m-auto' />
+                    :
+                    <>
+                        <DataTable
+                            className='hidden md:block'
+                            searchKey="title"
+                            columns={columns(permissions)}
+                            data={data}
+                            setPageIndex={() => { }}
+                            permissions={permissions}
+                        />
+                        <PermissionTable
+                            className='md:hidden'
+                            data={data}
+                            permissions={permissions}
+                        />
+                    </>
+            }
         </>
     );
 };

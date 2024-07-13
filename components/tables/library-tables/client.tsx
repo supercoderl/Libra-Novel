@@ -9,16 +9,18 @@ import { columns } from './columns';
 import { Novel, PermissionStates } from '@/types';
 import LibraryTable from './table-mobile';
 import { Dispatch, SetStateAction } from 'react';
+import Spinner from '@/components/ui/spinner';
 
 interface NovelsClientProps {
     data: Novel[];
     isNext: boolean;
     isPrevious: boolean;
+    loading: boolean;
     setPageIndex: Dispatch<SetStateAction<number>>;
     permissions: PermissionStates;
 }
 
-export const NovelClient: React.FC<NovelsClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions }) => {
+export const NovelClient: React.FC<NovelsClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions, loading }) => {
     const router = useRouter();
 
     return (
@@ -52,24 +54,31 @@ export const NovelClient: React.FC<NovelsClientProps> = ({ data, isNext, isPrevi
                 </div>
             </div>
             <Separator />
-            <DataTable
-                className='hidden md:block'
-                searchKey="title"
-                columns={columns(permissions)}
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
-            <LibraryTable
-                className='md:hidden'
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
+            {
+                loading ?
+                    <Spinner className="w-12 h-12 m-auto" />
+                    :
+                    <>
+                        <DataTable
+                            className='hidden md:block'
+                            searchKey="title"
+                            columns={columns(permissions)}
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                        <LibraryTable
+                            className='md:hidden'
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                    </>
+            }
         </>
     );
 };

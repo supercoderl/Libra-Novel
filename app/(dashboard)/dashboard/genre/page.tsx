@@ -14,6 +14,7 @@ export default function Page() {
     const [genres, setGenres] = useState([]);
     const [isNext, setNext] = useState(false);
     const [isPrevious, setPrevious] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pageIndex, setPageIndex] = useState(1);
     const { permissions } = useContext(PermissionsContext);
     const [permissionStates, setPermissionStates] = useState<PermissionStates>({
@@ -32,7 +33,7 @@ export default function Page() {
                 setNext(data.data.next);
                 setPrevious(data.data.previous);
             }
-        });
+        }).finally(() => setTimeout(() => setLoading(false), 300));
     };
 
     //Init
@@ -63,6 +64,7 @@ export default function Page() {
                         <GenreClient
                             data={genres}
                             isNext={isNext}
+                            loading={loading}
                             isPrevious={isPrevious}
                             setPageIndex={setPageIndex}
                             permissions={permissionStates}

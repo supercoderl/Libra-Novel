@@ -14,6 +14,7 @@ export default function Page() {
     const [comments, setComments] = useState([]);
     const [isNext, setNext] = useState(false);
     const [isPrevious, setPrevious] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pageIndex, setPageIndex] = useState(1);
     const { permissions } = useContext(PermissionsContext);
     const [permissionStates, setPermissionStates] = useState<PermissionStates>({
@@ -33,7 +34,7 @@ export default function Page() {
                 setNext(data.data.next);
                 setPrevious(data.data.previous);
             }
-        });
+        }).finally(() => setTimeout(() => setLoading(false), 300));
     };
 
 
@@ -65,6 +66,7 @@ export default function Page() {
                             data={comments}
                             isNext={isNext}
                             isPrevious={isPrevious}
+                            loading={loading}
                             setPageIndex={setPageIndex}
                             permissions={permissionStates}
                         />
