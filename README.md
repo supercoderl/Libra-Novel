@@ -116,16 +116,31 @@ _Below is an example of how you can instruct your audience on installing and set
 
 1. Get Secret key by ```sh openssl rand -base64 32```
 2. Clone the repo
+
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/supercoderl/Libra-Novel.git
    ```
 3. Install NPM packages
+
    ```sh
    npm install
    ```
-4. Enter your Secret in `.evn.local`
+4. Environment
+
    ```js
-   AUTH_SECRET = 'ENTER SECRET KEY';
+   AUTH_SECRET=""
+   AUTH_URL=""
+   NEXTAUTH_URL=""
+   NEXTAUTH_SECRET=""
+   GITHUB_ID="" 
+   GITHUB_SECRET="" 
+   GOOGLE_CLIENT_ID=""
+   GOOGLE_CLIENT_SECRET=""
+   DISCORD_CLIENT_ID=""
+   DISCORD_CLIENT_SECRET=""
+   NEXT_PUBLIC_API_URL=""
+   NEXT_PUBLIC_CLIENT_URL=""
+   NEXT_PUBLIC_DUMMY_IMAGE=""
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
