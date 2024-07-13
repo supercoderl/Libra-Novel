@@ -50,7 +50,7 @@ const UserNav: React.FC<{ btnCls?: string, isHome?: boolean }> = ({ btnCls, isHo
                     }>
                         <Avatar className="h-8 w-8">
                             <AvatarImage
-                                src={session.user?.avatar ?? ''}
+                                src={session.user?.avatar || process.env.NEXT_PUBLIC_DUMMY_IMAGE}
                                 alt={session.user?.name ?? ''}
                             />
                             <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback>

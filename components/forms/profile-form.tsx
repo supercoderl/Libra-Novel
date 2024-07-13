@@ -194,7 +194,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
                                         <SelectItem value={"Female"}>
                                             Nữ
                                         </SelectItem>
-                                        <SelectItem value={"Orther"}>
+                                        <SelectItem value={"Other"}>
                                             Khác
                                         </SelectItem>
                                     </SelectContent>

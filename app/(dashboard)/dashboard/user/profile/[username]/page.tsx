@@ -65,7 +65,7 @@ export default function Page() {
                                 roles={[100]}
                                 loading={loading}
                                 setLoading={setLoading}
-                                avatar={user?.avatar}
+                                avatar={user?.avatar || process.env.NEXT_PUBLIC_DUMMY_IMAGE}
                                 url={`libra-novel/profile/${encodeEmailToNumber(user?.email)}`}
                             />
                         </div>
