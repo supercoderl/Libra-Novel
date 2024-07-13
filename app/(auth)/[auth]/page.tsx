@@ -3,19 +3,43 @@
 import Link from 'next/link';
 import { UserAuthForm } from '@/components/forms/user-auth-form';
 import { buttonVariants } from '@/components/ui/button';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import libra from '../../../public/assets/images/logo/libra.png';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function LoginPage() {
     const pathName = usePathname();
+    const [result, setResult] = useState<{ success: boolean | null, message: string | null }>({
+        success: null,
+        message: null
+    });
+
+    const { toast } = useToast();
 
     //Init checking the pathname contains login or register to navigate to right state
     useEffect(() => {
         if (!pathName.includes("login") && !pathName.includes("register")) window.history.back();
     }, []);
+
+    useEffect(() => {
+        if (result.success === true) {
+            toast({
+                variant: 'default',
+                title: 'Chúc mừng.',
+                description: result.message
+            });
+        }
+        if (result.success === false) {
+            toast({
+                variant: 'destructive',
+                title: 'Có lỗi xảy ra',
+                description: result.message
+            });
+        }
+    }, [result]);
 
     return (
         <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -68,7 +92,10 @@ export default function LoginPage() {
                                 Chào mừng đến với trang tiểu thuyết Libra Novel
                             </p>
                         </div>
-                        <UserAuthForm state={pathName} />
+                        <UserAuthForm
+                            state={pathName}
+                            setResult={setResult}
+                        />
                         <p className="px-6 text-center text-sm text-muted-foreground">
                             Bằng cách nhấn tiếp tục, bạn đồng ý với{' '}
                             <Link

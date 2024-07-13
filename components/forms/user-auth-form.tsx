@@ -10,18 +10,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { getSession, signIn } from 'next-auth/react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { SocialSignInButton } from '../auth-button';
-import { useToast } from '../ui/use-toast';
 import React from 'react';
 import { RadioBox } from '../ui/radio';
 import { genders } from '@/constants/gender';
 import Spinner from '../ui/spinner';
 import useAxios from '@/hooks/useAxios';
 import { encodeEmailToNumber } from '@/utils/text';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     email: z.string().email({ message: 'Enter a valid email address' }),
@@ -33,9 +33,14 @@ const formSchema = z.object({
 
 type UserFormValue = z.infer<typeof formSchema>;
 
-export const UserAuthForm = ({ state }: { state: string }) => {
-    const { toast } = useToast();
+export const UserAuthForm = ({ state, setResult }: {
+    state: string, setResult: Dispatch<SetStateAction<{
+        success: boolean | null;
+        message: string | null;
+    }>>
+}) => {
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
     const defaultValues = {
         email: 'admin@gmail.com',
         password: 'string',
@@ -57,21 +62,31 @@ export const UserAuthForm = ({ state }: { state: string }) => {
             signIn('credentials', {
                 email: data.email,
                 password: data.password,
-                callbackUrl: `/dashboard`,
-                redirect: true
-            }).then(() => {
-                // if (session && session.user && session.user.roles && session.user.roles.length > 0) {
-                //     if (session.user.roles.some((r: number) => r === 300) || session.user.roles.some((r: number) => r === 200)) {
-                //         router.push("http://localhost:3000/dashboard");
-                //     }
-                //     else {
-                //         router.push("http://localhost:3000/");
-                //     }
-                // }
-                // else {
-                //     router.push("http://localhost:3000/");
-                // }
-            }).finally(() => setTimeout(() => setLoading(false), 300));
+                redirect: false,
+            }).then((result) => {
+                if (result?.error && (result?.error !== null || result?.error !== "")) {
+                    setResult({
+                        success: false,
+                        message: "Thông tin đăng nhập không đúng.",
+                    });
+                }
+                else {
+                    setResult({
+                        success: true,
+                        message: "Đăng nhập thành công.",
+                    });
+                    getSession().then(session => {
+                        if (session?.user) {
+                            if (session?.user?.roles?.includes(100)) {
+                                router.push("/dashboard");
+                            }
+                            else {
+                                router.push("/");
+                            }
+                        }
+                    });
+                }
+            }).catch((error) => console.log(error)).finally(() => setTimeout(() => setLoading(false), 300));
         }
         else {
             const formData = new FormData();
@@ -86,10 +101,9 @@ export const UserAuthForm = ({ state }: { state: string }) => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then(({ data }) => {
                 if (data && data.succeeded) {
-                    toast({
-                        variant: 'default',
-                        title: 'Chúc mừng.',
-                        description: 'Tạo thành công người dùng mới.'
+                    setResult({
+                        success: true,
+                        message: "Đăng ký thành công."
                     });
                 }
             }).finally(() => setLoading(false));

@@ -1,10 +1,14 @@
-import { NextAuthConfig, User } from 'next-auth';
+import { CredentialsSignin, NextAuthConfig, User } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import DiscordProvider from 'next-auth/providers/discord';
 import { login, loginByProvider } from './app/actions/authActions';
 import { encodeEmailToNumber } from './utils/text';
+
+class InvalidLoginError extends CredentialsSignin {
+  code = 'Invalid identifier or password'
+}
 
 const authConfig: NextAuthConfig = {
   providers: [
@@ -15,7 +19,7 @@ const authConfig: NextAuthConfig = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-      
+
     }),
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID ?? '',
@@ -31,26 +35,28 @@ const authConfig: NextAuthConfig = {
         }
       },
       async authorize(credentials, req): Promise<any> {
-        const res = await login({
-          email: credentials?.email,
-          password: credentials?.password
-        });
+        try {
+          const res = await login({
+            email: credentials?.email,
+            password: credentials?.password
+          });
 
-        if (res.succeeded) {
-          // Any object returned will be saved in `user` property of the JWT
-          var result: User = {
-            accessToken: res.data.accessToken,
-            refreshToken: res.data.refreshToken,
-            id: res.data.user.userID,
-            email: res.data.user.email || "",
-            roles: res.data.user.roles,
-            avatar: res.data.user.avatar,
-            name: res.data.user.fullName
-          };
-          return result;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
+          if (res.succeeded) {
+            // Any object returned will be saved in `user` property of the JWT
+            var result: User = {
+              accessToken: res.data.accessToken,
+              refreshToken: res.data.refreshToken,
+              id: res.data.user.userID,
+              email: res.data.user.email || "",
+              roles: res.data.user.roles,
+              avatar: res.data.user.avatar,
+              name: res.data.user.fullName
+            };
+            return result;
+          }
+        }
+        catch (error) {
+          throw new InvalidLoginError();
         }
       }
     })
@@ -61,9 +67,7 @@ const authConfig: NextAuthConfig = {
   session: { strategy: 'jwt' },
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log(profile);
-      if(account?.provider)
-      {
+      if (account?.provider) {
         const res = await loginByProvider({
           email: profile?.email,
           userID: String(profile?.id || "password"),
