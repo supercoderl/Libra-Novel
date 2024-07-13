@@ -9,6 +9,7 @@ import { columns } from './columns';
 import UserTable from './table-mobile';
 import { PermissionStates, User } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
+import Spinner from '@/components/ui/spinner';
 
 interface UsersClientProps {
     data: User[];
@@ -16,9 +17,10 @@ interface UsersClientProps {
     isPrevious: boolean;
     setPageIndex: Dispatch<SetStateAction<number>>;
     permissions: PermissionStates;
+    loading: boolean;
 }
 
-export const UserClient: React.FC<UsersClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions }) => {
+export const UserClient: React.FC<UsersClientProps> = ({ data, isNext, isPrevious, setPageIndex, permissions, loading }) => {
     const router = useRouter();
 
     return (
@@ -52,24 +54,31 @@ export const UserClient: React.FC<UsersClientProps> = ({ data, isNext, isPreviou
                 </div>
             </div>
             <Separator />
-            <DataTable
-                className='hidden md:block'
-                searchKey="email"
-                columns={columns(permissions)}
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
-            <UserTable
-                className='md:hidden'
-                data={data}
-                isNext={isNext}
-                isPrevious={isPrevious}
-                setPageIndex={setPageIndex}
-                permissions={permissions}
-            />
+            {
+                loading ?
+                    <Spinner className='w-12 h-12 m-auto' />
+                    :
+                    <>
+                        <DataTable
+                            className='hidden md:block'
+                            searchKey="email"
+                            columns={columns(permissions)}
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                        <UserTable
+                            className='md:hidden'
+                            data={data}
+                            isNext={isNext}
+                            isPrevious={isPrevious}
+                            setPageIndex={setPageIndex}
+                            permissions={permissions}
+                        />
+                    </>
+            }
         </>
     );
 };
