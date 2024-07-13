@@ -74,13 +74,16 @@ export const UserAuthForm = ({ state }: { state: string }) => {
             }).finally(() => setTimeout(() => setLoading(false), 300));
         }
         else {
-            await axios.post(`/register`, {
-                email: data.email,
-                passwordHash: data.password,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                userCode: encodeEmailToNumber(data.email),
-                gender: data.gender,
+            const formData = new FormData();
+            formData.append('email', data.email);
+            formData.append('passwordHash', data.password);
+            formData.append('firstName', data.firstName);
+            formData.append('lastName', data.lastName);
+            formData.append('userCode', encodeEmailToNumber(data.email));
+            formData.append('gender', data.gender);
+
+            await axios.post(`/register`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
             }).then(({ data }) => {
                 if (data && data.succeeded) {
                     toast({

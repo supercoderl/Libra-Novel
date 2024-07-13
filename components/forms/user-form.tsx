@@ -133,7 +133,18 @@ export const UserForm: React.FC<UserFormProps> = ({
                     }
                 });
             } else {
-                await axios.post(`/register`, { ...data, userCode: encodeEmailToNumber(data.email) }).then(({ data }) => {
+                const formData = new FormData();
+                formData.append('file', data.avatar);
+                formData.append('email', data.email);
+                formData.append('passwordHash', data.passwordHash);
+                formData.append('firstName', data.firstName);
+                formData.append('lastName', data.lastName);
+                formData.append('userCode', encodeEmailToNumber(data.email));
+                formData.append('gender', data.gender);
+
+                await axios.post(`/register`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }).then(({ data }) => {
                     if (data && data.succeeded) {
                         toast({
                             variant: 'default',
