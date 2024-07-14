@@ -4,9 +4,11 @@ import BreadCrumb from '@/components/breadcrumb';
 import { Forbidden } from '@/components/errors/forbidden';
 import { NovelClient } from '@/components/tables/library-tables/client';
 import { PermissionsContext } from '@/contexts/AppProvider';
+import { checkIsGuest } from '@/utils/logic';
 import useAxios from '@/hooks/useAxios';
 import { checkPermission } from '@/hooks/usePermissions';
 import { PermissionStates } from '@/types';
+import { useSession } from 'next-auth/react';
 import { useContext, useEffect, useState } from 'react';
 
 const breadcrumbItems = [{ title: 'Thư viện', link: '/dashboard/library' }];
@@ -23,12 +25,13 @@ export default function Page() {
         canCreate: false,
         canDelete: false
     });
+    const { data: session } = useSession();
     const axios = useAxios();
 
     //Load novel list
     const onLoadData = async () => {
         await axios.get(`/get-novels`, {
-            params: { pageIndex }
+            params: { pageIndex, isOwner: checkIsGuest(session) }
         }).then(({ data }) => {
             if (data && data.succeeded && data.data) {
                 setNovels(data.data.items);

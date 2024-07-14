@@ -7,6 +7,8 @@ import { PermissionsContext } from '@/contexts/AppProvider';
 import useAxios from '@/hooks/useAxios';
 import { checkPermission } from '@/hooks/usePermissions';
 import { PermissionStates } from '@/types';
+import { checkIsGuest } from '@/utils/logic';
+import { useSession } from 'next-auth/react';
 import { useContext, useEffect, useState } from 'react';
 
 const breadcrumbItems = [{ title: 'Bình luận', link: '/dashboard/comment' }];
@@ -17,6 +19,7 @@ export default function Page() {
     const [loading, setLoading] = useState(true);
     const [pageIndex, setPageIndex] = useState(1);
     const { permissions } = useContext(PermissionsContext);
+    const { data: session } = useSession();
     const [permissionStates, setPermissionStates] = useState<PermissionStates>({
         canView: null,
         canEdit: false,
@@ -27,7 +30,7 @@ export default function Page() {
     //Get comment list with default: PageIndex = 1, PageSize = 10
     const onLoadData = async () => {
         await axios.get("/get-all-comments", {
-            params: { pageIndex, pageSize: 10 }
+            params: { pageIndex, pageSize: 10, isOwner: checkIsGuest(session) }
         }).then(({ data }) => {
             if (data && data.succeeded && data.data) {
                 setComments(data.data.items);
