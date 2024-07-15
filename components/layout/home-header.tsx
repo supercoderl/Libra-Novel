@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Bell, Tally1Icon } from "lucide-react";
 import Link from "next/link";
@@ -13,7 +13,6 @@ import { encodeEmailToNumber } from "@/utils/text";
 
 export default function HomeHeader() {
     const [isOpen, setIsOpen] = useState(false);
-    const [novels, setNovels] = useState([]);
     const { status, data: session } = useSession();
     const axios = useAxios();
 
@@ -31,23 +30,6 @@ export default function HomeHeader() {
         }
     }
 
-    //Load novel list
-    const onLoadData = async () => {
-        await axios.get("get-novels", {
-            params: {
-                pageSize: 100
-            }
-        }).then(({ data }) => {
-            if (data && data.succeeded && data.data) {
-                setNovels(data.data.items);
-            }
-        });
-    }
-
-    useEffect(() => {
-        onLoadData();
-    }, []);
-
     return (
         <div>
             <nav className="w-full z-10">
@@ -59,7 +41,7 @@ export default function HomeHeader() {
                                     Libra<span className="text-main">Novel</span>
                                 </h1>
                             </div>
-                            <SearchComponent data={novels} />
+                            <SearchComponent />
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-center space-x-4">
                                     <Link

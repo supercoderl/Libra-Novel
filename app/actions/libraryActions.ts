@@ -15,11 +15,11 @@ export async function fetchNovelByID(novelID: number): Promise<Response | null> 
     }
 }
 
-export async function fetchAllNovels(pageIndex: number = 1, pageSize: number = 10, genreID?: number): Promise<Response | null> {
+export async function fetchAllNovels(pageIndex: number = 1, pageSize: number = 10, genreID?: number, searchText?: string): Promise<Response | null> {
     const url = `/get-novels`;
 
     try {
-        const { data } = await api.get<Response>(url, { params: { pageSize, pageIndex, genreID } });
+        const { data } = await api.get<Response>(url, { params: { pageSize, pageIndex, genreID, searchText } });
         return data;
     } catch (error: any) {
         ErrorLogger(url, error);
