@@ -30,3 +30,21 @@ export const richTextOptions = {
         '#1C7A90', '#249CB8', '#4ABED9', '#FBD75B', '#FBE571', '#FFFFFF'
     ]
 };
+
+export const provider = [
+    {
+        id: 1,
+        img: "https://static-00.iconduck.com/assets.00/visa-icon-2048x1286-fhy0jwfc.png",
+        label: "paypal"
+    },
+    {
+        id: 2,
+        img: "https://static-00.iconduck.com/assets.00/mastercard-icon-2048x1286-s6y46dfh.png",
+        label: "mastercard" 
+    },
+    {
+        id: 4,
+        img: "https://static-00.iconduck.com/assets.00/credit-card-emoji-2048x1317-btgi2qqv.png",
+        label: "bank"
+    }
+]

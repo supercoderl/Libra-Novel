@@ -14,6 +14,8 @@ import {
     TooltipTrigger
 } from './ui/tooltip';
 import { cn } from '@/lib/utils';
+import { useSession } from 'next-auth/react';
+import { encodeEmailToNumber } from '@/utils/text';
 
 interface DashboardNavProps {
     items: NavItem[];
@@ -27,6 +29,7 @@ export function DashboardNav({
     isMobileNav = false
 }: DashboardNavProps) {
     const path = usePathname();
+    const { data: session } = useSession();
     const { isMinimized } = useSidebar();
 
     if (!items?.length) {
@@ -43,7 +46,12 @@ export function DashboardNav({
                             <Tooltip key={index}>
                                 <TooltipTrigger asChild>
                                     <Link
-                                        href={menu.disabled ? '/' : menu.path}
+                                        href={
+                                            menu.disabled ? '/' : 
+                                            menu.path.includes("profile") && 
+                                            session && 
+                                            session?.user ? 
+                                            menu.path + `/${encodeEmailToNumber(session?.user?.email)}` : menu.path}
                                         className={cn(
                                             'flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
                                             path === menu.path ? 'bg-accent' : 'transparent',

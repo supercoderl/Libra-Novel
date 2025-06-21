@@ -82,7 +82,12 @@ const Hero: React.FC<{ novels: Novel[], loading: boolean }> = ({ novels, loading
                                 onClick={() => window.location.href = `/novel/${novel.novelID}`}
                             >
                                 <h3 className="md:text-xl text-medium">0{index + 1}</h3>
-                                <img className="w-9" src={novel.coverImage || process.env.NEXT_PUBLIC_DUMMY_IMAGE} alt={novel.img_des || ""} />
+                                <img
+                                    className="w-9"
+                                    src={novel.coverImage || process.env.NEXT_PUBLIC_DUMMY_IMAGE}
+                                    alt={novel.img_des || ""}
+                                    loading="lazy"
+                                />
                                 <div className="flex flex-col gap-1 overflow-hidden">
                                     <p className="font-medium md:text-lg truncate">{novel.title}</p>
                                     <div className="flex gap-3">

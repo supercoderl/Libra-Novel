@@ -167,3 +167,35 @@ export type PermissionStates = {
   canCreate?: boolean;
   canDelete: boolean;
 }
+
+export type DashBoard = {
+  novelDashboard: {
+    total: number,
+    percentage: number
+  };
+  userCreatedDashboard: {
+    total: number,
+    percentage: number
+  };
+  commentDashboard: {
+    total: number,
+    percentage: number
+  };
+  operatingTimeDashboard: {
+    hours: number,
+    lastLoginTime: Date
+  }
+}
+
+export type CardType = {
+  cardID: number,
+  userID: string,
+  paymentMethod: string,
+  cardNumber: string,
+  cardHolderName: string,
+  expirationDate: string,
+  cVV: string,
+  status: string,
+  description: string | null,
+  createdDate: Date
+}

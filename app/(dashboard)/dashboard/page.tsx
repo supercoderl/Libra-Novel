@@ -12,9 +12,31 @@ import {
     CardTitle
 } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import Spinner from '@/components/ui/spinner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import useAxios from '@/hooks/useAxios';
+import { DashBoard } from '@/types';
+import { dateFormatter } from '@/utils/date';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
+    const [data, setData] = useState<DashBoard | null>(null);
+    const [loading, setLoading] = useState(true);
+    const axios = useAxios();
+
+    const onLoadData = async () => {
+        await axios.get("/get-data").then(({ data }) => {
+            console.log(data);
+            if (data && data.succeeded && data.data) {
+                setData(data.data);
+            }
+        }).finally(() => setTimeout(() => setLoading(false), 300));
+    };
+
+    useEffect(() => {
+        onLoadData();
+    }, []);
+
     return (
         <ScrollArea className="h-full">
             <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
@@ -53,10 +75,17 @@ export default function Page() {
                                     </svg>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">45,231 truyện</div>
-                                    <p className="text-xs text-muted-foreground">
-                                        +20.1% so với tháng trước
-                                    </p>
+                                    {
+                                        loading ?
+                                            <Spinner className='w-12 h-12' />
+                                            :
+                                            <>
+                                                <div className="text-2xl font-bold">{data?.novelDashboard.total} truyện</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    +20.1% so với tháng trước
+                                                </p>
+                                            </>
+                                    }
                                 </CardContent>
                             </Card>
                             <Card>
@@ -89,10 +118,17 @@ export default function Page() {
                                     </svg>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">+2350</div>
-                                    <p className="text-xs text-muted-foreground">
-                                        +180.1% so với tháng trước
-                                    </p>
+                                    {
+                                        loading ?
+                                            <Spinner className='w-12 h-12' />
+                                            :
+                                            <>
+                                                <div className="text-2xl font-bold">+{data?.userCreatedDashboard.total}</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    +180.1% so với tháng trước
+                                                </p>
+                                            </>
+                                    }
                                 </CardContent>
                             </Card>
                             <Card>
@@ -107,10 +143,17 @@ export default function Page() {
                                     ><path d="M12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.26,6.33l-2,2a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,22h9A10,10,0,0,0,12,2Zm0,18H5.41l.93-.93a1,1,0,0,0,0-1.41A8,8,0,1,1,12,20Z" /></svg>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">+12,234</div>
-                                    <p className="text-xs text-muted-foreground">
-                                        +19% so với tháng trước
-                                    </p>
+                                    {
+                                        loading ?
+                                            <Spinner className='w-12 h-12' />
+                                            :
+                                            <>
+                                                <div className="text-2xl font-bold">+{data?.commentDashboard.total}</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    +19% so với tháng trước
+                                                </p>
+                                            </>
+                                    }
                                 </CardContent>
                             </Card>
                             <Card>
@@ -129,10 +172,17 @@ export default function Page() {
                                     </svg>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">141 giờ</div>
-                                    <p className="text-xs text-muted-foreground">
-                                        Lần đăng nhập cuối: 14-07-2024
-                                    </p>
+                                    {
+                                        loading ?
+                                            <Spinner className='w-12 h-12' />
+                                            :
+                                            <>
+                                                <div className="text-2xl font-bold">{data?.operatingTimeDashboard.hours} giờ</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Lần đăng nhập cuối: {dateFormatter(data?.operatingTimeDashboard.lastLoginTime)}
+                                                </p>
+                                            </>
+                                    }
                                 </CardContent>
                             </Card>
                         </div>

@@ -79,7 +79,7 @@ const UserNav: React.FC<{ btnCls?: string, isHome?: boolean }> = ({ btnCls, isHo
                                 <SquareArrowOutUpRight className='w-4' />
                             </DropdownMenuShortcut>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className='cursor-pointer'>
+                        <DropdownMenuItem className='cursor-pointer' onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_CLIENT_URL}/dashboard/payment`}>
                             Thanh toán
                             <DropdownMenuShortcut>
                                 <SquareArrowOutUpRight className='w-4' />

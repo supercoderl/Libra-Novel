@@ -22,6 +22,7 @@ module.exports = {
         main: '#ff8075',
         'background-custom': '#0C0C0C',
         trending: 'rgb(41 39 39 / 53%)',
+        absolute: 'rgba(0 0 0 / 10%)',
         search: 'rgb(89 78 78 / 32%)',
         description: 'rgba(255, 255, 255, 0.5)',
         border: 'hsl(var(--border))',
@@ -92,6 +93,10 @@ module.exports = {
       direction: {
         ltr: 'ltr',
         rtl: 'rtl',
+      },
+      boxShadow: {
+        'wallet': '0px 8px 24px 4px rgba(255,173,40,1)',
+        success: '0 15px 25px #00000019'
       },
     }
   },
